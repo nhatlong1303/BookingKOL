@@ -7,7 +7,7 @@ class Config {
     static isMobile = isMobile;
     static token = {};
     static profile: any = null;
-    static language = '84';
+    static language: any = '84';
     static encryptKey = "Taka";
     static loading: any = null;
     static notify: any = null;

@@ -11,10 +11,10 @@ interface Props {
 
 const Meta = (props: Props) => {
     const {
-        icon = '/icon-app.png',
-        keywords = 'Modena',
-        description = "Modena",
-        title = 'Modena',
+        icon = '/favicon.ico',
+        keywords = 'BookingKOL',
+        description = "BookingKOL",
+        title = 'BookingKOL',
         url = Config.env.url,
         image = Config.env.url + '/public_1.jpeg'
     } = props;
