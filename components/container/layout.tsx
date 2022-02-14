@@ -56,7 +56,7 @@ const Layout = (props: Props) => {
             <Header />
             <div className='main'>
                 <div className='main-page'>
-                    <div >
+                    <div className='slider' style={{ width: 'fit-content' }}>
                         <Image src={'/images/sliderads.png'} priority alt='' width={896} height={239} />
                     </div>
                     {mount ? children : null}
