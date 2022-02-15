@@ -15,7 +15,12 @@ const useStyle = makeStyles((theme: any) => ({
         },
         '& .address': {
             color: theme.palette.common.Ink.Gray,
-        }
+        },
+        [theme.breakpoints.down("md")]: {
+            '& .info': {
+                display: 'none !important'
+            },
+        },
     },
     copyRight: {
         color: theme.palette.common.Ink.Gray,
@@ -33,7 +38,7 @@ const MainRight = () => {
             <div className={classes.title}>KOL mới nhất</div>
             <div className={`list-kols ${classes.kols}`}>
                 <div className='item-kol'>
-                    <div className='avatar'> </div>
+                    <div className='avatar'><Image src={'/images/avatar.png'} priority alt='' width={49} height={49} /></div>
                     <div className='info'>
                         <span className='username'>Hoàng Thùy Linh</span>
                         <span className='address'>Hà Nội</span>
