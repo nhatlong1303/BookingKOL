@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { TextField, InputAdornment, IconButton, Button, Drawer } from '@mui/material';
 import Config from '../../config/index';
 import { Menu, Close } from '@mui/icons-material';
+import Auth from '../auth/auth';
 
 const useStyle = makeStyles((theme: any) => ({
     header: {
@@ -97,6 +98,7 @@ const useStyle = makeStyles((theme: any) => ({
 const Header = () => {
     const classes = useStyle();
     const [open, setOpen] = useState(false);
+    const [showModalAuth, setShowModalAuth] = useState(false);
     const router = useRouter();
     const onToggle = () => {
         setOpen(!open);
@@ -106,8 +108,12 @@ const Header = () => {
         setOpen(false);
     }, [router])
 
+    const onShowModalAuth = () => {
+        setShowModalAuth(!showModalAuth)
+    }
     return (
         <div className={`header ${classes.header}`}>
+            {showModalAuth && <Auth onClose={() => onShowModalAuth()} />}
             <div className="center-row">
                 <div className='logo-app'>
                     <Image src={'/logo.png'} priority alt='' width={250} height={80} />
@@ -157,7 +163,7 @@ const Header = () => {
                         startIcon={<Image src={'/icons/Download.svg'} priority alt='' width={24} height={24} />}>
                         Tải ứng dụng
                     </Button>
-                    <Button variant="outlined" className='btn-custom-kol btn-login'>
+                    <Button variant="outlined" className='btn-custom-kol btn-login' onClick={onShowModalAuth}>
                         Đăng nhập
                     </Button>
                 </div>
@@ -170,7 +176,7 @@ const Header = () => {
                     startIcon={<Image src={'/icons/Download.svg'} priority alt='' width={24} height={24} />}>
                     Tải ứng dụng
                 </Button>
-                <Button variant="outlined" className='btn-custom-kol btn-login'>
+                <Button variant="outlined" className='btn-custom-kol btn-login' onClick={onShowModalAuth}>
                     Đăng nhập
                 </Button>
             </div>
