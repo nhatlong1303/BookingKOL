@@ -1,8 +1,9 @@
 $main: #ff9767;
+// @import "fonts";
 @import "app";
+@import "loader";
 body {
     margin: 0;
-    // background-color: #f0f2f5 !important;
     font-family: "Roboto";
 }
 strong {
@@ -98,7 +99,7 @@ strong {
 .pd010 {
     padding: 0 10px !important;
 }
-.pdb5{
+.pdb5 {
     padding-bottom: 5px;
 }
 .center-row {
@@ -219,6 +220,9 @@ a {
 .swiper {
     position: absolute !important;
 }
-.main-page{
+.main-page {
     max-width: 896px;
+}
+.mgb32 {
+    margin-bottom: 32px !important;
 }

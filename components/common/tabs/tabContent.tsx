@@ -3,14 +3,14 @@ import { Box, Typography } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
 let lazyLoaded = false;
 interface Props {
-    activeKey: number,
-    style: any,
-    className: string,
-    disableSwipe: boolean,
-    disableTranstion: boolean,
-    onChangeIndex: () => void,
-    lazyLoading: boolean,
-    children: any,
+    activeKey?: number,
+    style?: any,
+    className?: string,
+    disableSwipe?: boolean,
+    disableTranstion?: boolean,
+    onChangeIndex?: () => void,
+    lazyLoading?: boolean,
+    children: React.ReactNode,
     direction?: any
 }
 function TabContent(props: Props) {
@@ -36,10 +36,10 @@ function TabContent(props: Props) {
 }
 
 interface TabPanelProps {
-    value: number,
+    value?: number,
     index: number,
-    other: object,
-    children: any
+    other?: object,
+    children: React.ReactNode
 }
 function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;

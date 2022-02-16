@@ -2,10 +2,19 @@ import { isMobile } from "react-device-detect";
 import moment from 'moment';
 import { localize } from '../localize/localize';
 import env from './env';
+
+interface token {
+    token: any,
+    expire: number
+}
 class Config {
 
     static isMobile = isMobile;
-    static token = {};
+    static token: token = {
+        token: null,
+        expire: 0
+    };
+    static getToken = {};
     static profile: any = null;
     static language: any = '84';
     static encryptKey = "Taka";

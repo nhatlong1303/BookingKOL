@@ -113,7 +113,6 @@ const Header = () => {
     }
     return (
         <div className={`header ${classes.header}`}>
-            {showModalAuth && <Auth onClose={() => onShowModalAuth()} />}
             <div className="center-row">
                 <div className='logo-app'>
                     <Image src={'/logo.png'} priority alt='' width={250} height={80} />
@@ -179,6 +178,7 @@ const Header = () => {
                 <Button variant="outlined" className='btn-custom-kol btn-login' onClick={onShowModalAuth}>
                     Đăng nhập
                 </Button>
+                {showModalAuth && <Auth onClose={() => onShowModalAuth()} />}
             </div>
         </div>
     );

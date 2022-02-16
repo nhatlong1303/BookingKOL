@@ -160,7 +160,7 @@
         max-height: 360px;
         position: relative;
         &:hover {
-            span{
+            span {
                 border-radius: 16px;
             }
             img {
@@ -187,4 +187,57 @@
             font-size: 14px;
         }
     }
+}
+.nolabel {
+    .MuiOutlinedInput-notchedOutline {
+        top: 0;
+    }
+}
+.text-field {
+    border-radius: 24px;
+    height: 48px !important;
+    width: 100%;
+    .MuiOutlinedInput-root {
+        height: 100%;
+        padding: 0;
+        input {
+            padding: 0 10px;
+        }
+    }
+    // .MuiInputLabel-root {
+    //     top: -2px;
+    // }
+    .MuiOutlinedInput-notchedOutline {
+        border-radius: 24px;
+        border-color: transparent !important;
+        border-width: 1px !important;
+        .css-nnbavb {
+            float: left !important;
+        }
+    }
+}
+
+.other-sign {
+    width: 400px;
+    padding: 32px 0;
+    position: relative;
+    margin: auto;
+    &::before,
+    &::after {
+        content: "";
+        height: 1px;
+        position: absolute;
+        width: calc(50% - 50px);
+        top: 50%;
+    }
+    &::before {
+        left: 0;
+    }
+    &::after {
+        right: 0;
+    }
+}
+
+form {
+    width: 100%;
 }
