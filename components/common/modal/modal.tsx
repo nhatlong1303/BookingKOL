@@ -36,7 +36,7 @@ interface Props {
     onClose: () => void,
     onBack?: any,
     open: boolean,
-    width: 'lg' | 'md' | 'sm' | 'xl',
+    width: 'lg' | 'md' | 'sm' | 'xl' | 'xs',
     disableEscapeKeyDown?: boolean,
     disableBackdropClick?: boolean,
     className?: any,

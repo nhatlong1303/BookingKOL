@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import Modal from '../common/modal/modal';
 import TabContent, { TabPanel } from '../common/tabs/tabContent';
 import { Tabs, Tab } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import SignUp from './signUp';
 import SignIn from './signIn';
+import ResizePageContainer from '../common/resizePageContainer';
+import { ResizeContext } from '../common/context/context';
+
 
 const useStyle = makeStyles((theme: any) => ({
     auth: {
@@ -49,7 +52,7 @@ const useStyle = makeStyles((theme: any) => ({
             },
         },
         '& .title': {
-            padding: '0 141px',
+            padding: '0 10%',
             marginBottom: 32,
             [theme.breakpoints.down("sm")]: {
                 padding: '0 60px',
@@ -108,15 +111,35 @@ const useStyle = makeStyles((theme: any) => ({
     }
 }))
 interface Props {
-    onClose: () => void
+    onClose: () => void,
+    classes?: any
 }
 const Auth = (props: Props) => {
     const { onClose } = props;
     const classes = useStyle();
+    return (
+        <ResizePageContainer>
+            <Component classes={classes} onClose={onClose} />
+        </ResizePageContainer>
+    );
+};
+
+
+const Component = (props: Props) => {
+    const { onClose, classes } = props;
     const [tab, setTab] = useState(0);
+    const deviceSize = useContext(ResizeContext);
+
+    const col = useMemo(() => {
+        if (deviceSize === 'xl') {
+            return 'sm';
+        } else {
+            return 'xs'
+        }
+    }, [deviceSize])
     return (
         <Modal
-            width='sm'
+            width={col}
             title={''}
             onClose={onClose}
             open={true}
@@ -136,7 +159,7 @@ const Auth = (props: Props) => {
                 <TabPanel value={tab} index={1}><SignIn classesProp={classes} setTab={setTab} /></TabPanel>
             </TabContent>
         </Modal>
-    );
-};
+    )
+}
 
 export default Auth;
