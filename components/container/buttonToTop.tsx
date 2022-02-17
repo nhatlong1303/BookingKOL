@@ -5,10 +5,10 @@ import { makeStyles } from '@mui/styles';
 import Image from 'next/image';
 const useStyle = makeStyles((theme: any) => ({
     button: {
-        color: theme.palette.common.Ink.Dark,
         backgroundColor: theme.palette.common.Neutral.White,
         '& .btn-custom-kol': {
-            border: 'none !important'
+            border: 'none !important',
+            color: theme.palette.common.Ink.Dark,
         }
     },
 

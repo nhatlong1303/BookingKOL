@@ -1,14 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { TextField, Button, InputAdornment, IconButton } from '@mui/material';
 import { useForm } from "react-hook-form";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Image from 'next/image';
+import InlineSVG from "react-inlinesvg";
 
 const useStyle = makeStyles((theme: any) => ({
-    signUp: {
+    required: {
+        fontSize: 14,
+        color: theme.palette.common.Ink.Gray,
+        paddingLeft: 20,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        marginTop: -10,
+        marginBottom: 16,
+        '& div': {
 
-    }
+        }
+    },
 }))
 
 interface Props {
@@ -17,7 +29,14 @@ interface Props {
 }
 const SignUp = (props: Props) => {
     const { classesProp, setTab } = props;
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const classes = useStyle();
+    const { register, handleSubmit, watch, formState: { errors } } = useForm({
+        defaultValues: {
+            email: '',
+            password: '',
+            ref: ''
+        }
+    });
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
@@ -37,7 +56,9 @@ const SignUp = (props: Props) => {
         console.log(e)
     }
 
-    const { password } = watch();
+    const password = watch('password');
+    const minLength = /^.{6,}$/.test(password)
+    console.log(minLength)
 
     return (
         <div className={classesProp.general}>
@@ -75,6 +96,15 @@ const SignUp = (props: Props) => {
                             ),
                         }}
                     />
+                    {password ?
+                        <div className={classes.required}>
+                            <div className={minLength ? 'isOk' : ''}><InlineSVG src={'/icons/SuccessCircle.svg'} width={13} height={13} />&nbsp;Ít nhất 6 ký tự</div>
+                            <div><InlineSVG src={'/icons/SuccessCircle.svg'} width={13} height={13} />&nbsp;Bao gồm chữ in hoa</div>
+                            <div><InlineSVG src={'/icons/SuccessCircle.svg'} width={13} height={13} />&nbsp;Bao gồm số</div>
+                        </div>
+                        : !errors.password &&
+                        <div className={classes.required}>Ít nhất 6 ký tự, bao gồm chữ in hoa và số</div>
+                    }
                     <TextField
                         label={'Mã giới thiệu'}
                         className={'text-field'}
