@@ -4,7 +4,6 @@ import { TextField, Button, InputAdornment, IconButton } from '@mui/material';
 import { useForm } from "react-hook-form";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Image from 'next/image';
 import InlineSVG from "react-inlinesvg";
 
 const useStyle = makeStyles((theme: any) => ({
@@ -17,8 +16,14 @@ const useStyle = makeStyles((theme: any) => ({
         alignItems: 'flex-start',
         marginTop: -10,
         marginBottom: 16,
-        '& div': {
-
+        '& svg': {
+            marginBottom: 2
+        },
+        '& path': {
+            fill: theme.palette.common.Ink.Gray,
+        },
+        '& .isOk path': {
+            fill: theme.palette.common.Denotative.Success,
         }
     },
 }))
@@ -57,9 +62,10 @@ const SignUp = (props: Props) => {
     }
 
     const password = watch('password');
-    const minLength = /^.{6,}$/.test(password)
-    console.log(minLength)
-
+    const minLength = /^.{6,}$/.test(password);
+    const uppercase = /(?=.*[A-Z])/.test(password);
+    const number = /(?=.*\d)/.test(password);
+    console.log(errors)
     return (
         <div className={classesProp.general}>
             <div className='title column'>
@@ -73,15 +79,15 @@ const SignUp = (props: Props) => {
                         className={`text-field ${errors.email ? 'mgb32' : ''}`}
                         {...register("email", { required: true })}
                         error={!!errors.email}
-                        helperText={errors.email && "Nhập email"}
+                        helperText={errors.email?.type==='required' && "Nhập email"}
                         autoComplete="off"
                     />
                     <TextField
                         label='Mật khẩu'
                         className={`text-field ${errors.password ? 'mgb32' : ''}`}
-                        {...register("password", { required: true })}
+                        {...register("password", { required: true ,minLength:6,pattern:/(?=.*\d)(?=.*[A-Z])/})}
                         error={!!errors.password}
-                        helperText={errors.password && "Nhập mật khẩu"}
+                        helperText={errors.password?.type==='required' && "Nhập mật khẩu"}
                         autoComplete="off"
                         type={showPassword ? "text" : "password"}
                         InputProps={{
@@ -99,8 +105,8 @@ const SignUp = (props: Props) => {
                     {password ?
                         <div className={classes.required}>
                             <div className={minLength ? 'isOk' : ''}><InlineSVG src={'/icons/SuccessCircle.svg'} width={13} height={13} />&nbsp;Ít nhất 6 ký tự</div>
-                            <div><InlineSVG src={'/icons/SuccessCircle.svg'} width={13} height={13} />&nbsp;Bao gồm chữ in hoa</div>
-                            <div><InlineSVG src={'/icons/SuccessCircle.svg'} width={13} height={13} />&nbsp;Bao gồm số</div>
+                            <div className={uppercase ? 'isOk' : ''}><InlineSVG src={'/icons/SuccessCircle.svg'} width={13} height={13} />&nbsp;Bao gồm chữ in hoa</div>
+                            <div className={number ? 'isOk' : ''}><InlineSVG src={'/icons/SuccessCircle.svg'} width={13} height={13} />&nbsp;Bao gồm số</div>
                         </div>
                         : !errors.password &&
                         <div className={classes.required}>Ít nhất 6 ký tự, bao gồm chữ in hoa và số</div>
