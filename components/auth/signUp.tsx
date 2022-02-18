@@ -58,6 +58,7 @@ const SignUp = (props: Props) => {
     }, [loading])
 
     const onSave = (e: any) => {
+        setLoading(true)
         console.log(e)
     }
 
@@ -65,7 +66,6 @@ const SignUp = (props: Props) => {
     const minLength = /^.{6,}$/.test(password);
     const uppercase = /(?=.*[A-Z])/.test(password);
     const number = /(?=.*\d)/.test(password);
-    console.log(errors)
     return (
         <div className={classesProp.general}>
             <div className='title column'>
@@ -79,15 +79,15 @@ const SignUp = (props: Props) => {
                         className={`text-field ${errors.email ? 'mgb32' : ''}`}
                         {...register("email", { required: true })}
                         error={!!errors.email}
-                        helperText={errors.email?.type==='required' && "Nhập email"}
+                        helperText={errors.email?.type === 'required' && "Nhập email"}
                         autoComplete="off"
                     />
                     <TextField
                         label='Mật khẩu'
                         className={`text-field ${errors.password ? 'mgb32' : ''}`}
-                        {...register("password", { required: true ,minLength:6,pattern:/(?=.*\d)(?=.*[A-Z])/})}
+                        {...register("password", { required: true, minLength: 6, pattern: /(?=.*\d)(?=.*[A-Z])/ })}
                         error={!!errors.password}
-                        helperText={errors.password?.type==='required' && "Nhập mật khẩu"}
+                        helperText={errors.password?.type === 'required' && "Nhập mật khẩu"}
                         autoComplete="off"
                         type={showPassword ? "text" : "password"}
                         InputProps={{
@@ -116,7 +116,6 @@ const SignUp = (props: Props) => {
                         className={'text-field'}
                         {...register("ref")}
                     />
-                    <input className='hidden' id="submit" type='submit' />
                     <Button disabled={loading} variant="outlined" className='btn-custom-kol btn-login' type='submit' onClick={handleSubmit(onSave)}>
                         {loading ? <><div className="loader-icon"></div> Đang tạo </> : 'Tạo tài khoản'}
                     </Button>

@@ -5,6 +5,7 @@ import { useTheme } from '@emotion/react';
 import { useThemeContext } from '../components/theme/ThemeContext';
 import Image from 'next/image';
 import Category from '../components/homePage/category';
+import { Button } from '@mui/material';
 
 const useStyle = makeStyles((theme: any) => ({
   HomePage: {
@@ -30,8 +31,8 @@ const useStyle = makeStyles((theme: any) => ({
       }
     },
   },
-  listKols: {
-    '& .item': {
+  cardKols: {
+    '& .card': {
       height: 'auto',
       width: 'calc(100% / 3 - 11px)',
       margin: '0 8px 16px 8px',
@@ -42,13 +43,26 @@ const useStyle = makeStyles((theme: any) => ({
         marginRight: '0 !important',
       },
       '& .profile': {
+        '&::before': {
+          background: theme.palette.common.Gradient.Aurora,
+        },
         '& label': {
           color: theme.palette.common.Neutral.White,
         },
         '& span': {
           color: theme.palette.common.Neutral.White,
+        },
+        '& .btn-custom-kol': {
+          color: theme.palette.common.Neutral.White,
+          width: '100%',
+          border: '1px solid ' + theme.palette.common.Neutral.White + ' !important',
+          '&:hover': {
+            backgroundColor: theme.palette.common.Neutral.White,
+            color: theme.palette.common.Brand.Orange,
+          }
         }
       },
+
       [theme.breakpoints.between("sm", "md")]: {
         width: 'calc(100% / 2 - 11px)',
         '&:nth-child(2n+1)': {
@@ -80,21 +94,32 @@ const Home: NextPage = (props) => {
     <div className={classes.HomePage} >
       <div className={classes.title}>Lĩnh vực</div>
       <Category />
-      <div className={`${classes.listKols} listKols`}>
+      <div className={`${classes.cardKols} cardKols`}>
         {[0, 1, 2, 3].map(rs => (
-          <div className='item' key={rs}>
+          <div className='card' key={rs}>
             <div className='avatar'>
               <Image src={'/images/image.png'} objectFit='cover' alt='' width={288} height={360} />
             </div>
             <div className='profile column'>
-              <label>Triệu Mẫn Di</label>
-              <span className="center-row pdb5"><Image src={'/icons/Location.svg'} priority alt='' width={20} height={20} />&nbsp;Hồ Chí Minh</span>
-              <span className="center-row"><Image src={'/icons/Money.svg'} priority alt='' width={20} height={20} />&nbsp;10.000.000đ</span>
+              <div className='profile-main'>
+                <label>Triệu Mẫn Di</label>
+                <span className="center-row pdb5"><Image src={'/icons/Location.svg'} priority alt='' width={20} height={20} />&nbsp;Hồ Chí Minh</span>
+                <span className="center-row"><Image src={'/icons/Money.svg'} priority alt='' width={20} height={20} />&nbsp;10.000.000đ</span>
+                <div className='profile-detail'>
+                  <div className='cate'>
+                    <div>Mẫu ảnh</div>
+                    <div>PG sự kiện</div>
+                    <div>+2</div>
+                  </div>
+                  <span className='description'>Hiện là một trong những người có tầm ảnh hưởng trên cộng đồng mạng đang được các NETIZEN đặc biệt quan  tâm bởi sở hữu vẻ ngoài xinh đẹp tài năng...</span>
+                  <div style={{ padding: '10px 16px' }}><Button variant="outlined" className='btn-custom-kol' >Đọc tiếp</Button></div>
+                </div>
+              </div>
             </div>
           </div>
         ))}
       </div>
-    </div>
+    </div >
   );
 };
 

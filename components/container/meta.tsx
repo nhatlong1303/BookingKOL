@@ -11,7 +11,7 @@ interface Props {
 
 const Meta = (props: Props) => {
     const {
-        icon = '/favicon.ico',
+        icon = '/favicon.svg',
         keywords = 'BookingKOL',
         description = "BookingKOL",
         title = 'BookingKOL',
