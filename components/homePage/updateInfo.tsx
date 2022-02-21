@@ -12,21 +12,20 @@ const useStyle = makeStyles((theme: any) => ({
         boxShadow: '0px 2px 16px rgba(158, 158, 158, 0.16)',
         borderRadius: 16,
         margin: 'auto',
-        padding: '48px 10%',
+        padding: '38px 10%',
         position: 'relative',
         [theme.breakpoints.down("sm")]: {
-            marginTop: '28px !important',
             padding: '48px 10px',
         },
         '& .avatar': {
             padding: '0 64px',
-            marginBottom: 32,
+            marginBottom: Config.marginBottmScale,
             display: 'flex',
             justifyContent: 'center',
             cursor: 'pointer',
             '& .avatar_container': {
-                width: 192,
-                height: 192,
+                width: Config.screenMac ? 162 : 192,
+                height: Config.screenMac ? 162 : 192,
                 display: 'flex',
                 position: 'relative',
                 alignItems: 'center',
@@ -34,8 +33,8 @@ const useStyle = makeStyles((theme: any) => ({
             },
             '& .left': {
                 background: theme.palette.common.Gradient.Sunset,
-                width: 128,
-                height: 128,
+                width: Config.screenMac ? 108 : 128,
+                height: Config.screenMac ? 108 : 128,
                 borderRadius: '50%',
                 position: 'absolute',
                 left: 0,
@@ -44,8 +43,8 @@ const useStyle = makeStyles((theme: any) => ({
             },
             '& .right': {
                 background: theme.palette.common.Gradient.Sunshine,
-                width: 128,
-                height: 128,
+                width: Config.screenMac ? 108 : 128,
+                height: Config.screenMac ? 108 : 128,
                 borderRadius: '50%',
                 position: 'absolute',
                 right: 0,
@@ -54,8 +53,8 @@ const useStyle = makeStyles((theme: any) => ({
             },
             '& .middle': {
                 backgroundColor: theme.palette.common.Neutral.White,
-                width: 160,
-                height: 160,
+                width: Config.screenMac ? 140 : 160,
+                height: Config.screenMac ? 140 : 160,
                 borderRadius: '50%',
                 boxShadow: '0px 3px 8px rgba(102, 102, 102, 0.24)',
                 display: 'flex',
@@ -65,8 +64,8 @@ const useStyle = makeStyles((theme: any) => ({
                 zIndex: 2,
                 '& .middle-main': {
                     backgroundColor: theme.palette.common.Neutral.Smoke,
-                    width: 150,
-                    height: 150,
+                    width: Config.screenMac ? 130 : 150,
+                    height: Config.screenMac ? 130 : 150,
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
@@ -75,30 +74,31 @@ const useStyle = makeStyles((theme: any) => ({
             }
         },
         '& .fullname': {
-            marginBottom: 32,
+            marginBottom: Config.marginBottmScale,
             '& input': {
                 textAlign: 'center',
-                fontSize: 32
+                fontWeight: 500,
+                fontSize: Config.screenMac ? 18 : 32
             }
         },
         '& .become': {
             color: theme.palette.common.Ink.Dark,
             textAlign: 'center',
-            marginBottom: 32,
+            marginBottom: Config.marginBottmScale,
             padding: '0 10px',
             '& label': {
-                fontSize: 20,
-                marginBottom: 32
+                fontSize: Config.screenMac ? 16 : 20,
+                marginBottom: Config.marginBottmScale
             },
             '& .kol': {
                 cursor: 'pointer',
-                width: 167,
-                height: 167,
+                width: Config.screenMac ? 147 : 167,
+                height: Config.screenMac ? 147 : 167,
                 borderRadius: 24,
                 boxShadow: '0px 2px 16px rgba(158, 158, 158, 0.16)',
                 justifyContent: 'center',
                 '& span': {
-                    fontSize: 16,
+                    fontSize: Config.screenMac ? 14 : 16,
                     fontWeight: 500,
                     marginTop: 20
                 },
@@ -140,64 +140,88 @@ const useStyle = makeStyles((theme: any) => ({
 const UpdateInfo = () => {
     const classes = useStyle();
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const [selectedImage, setSelectedImage] = useState<any>({ file: null, url: null });
     const [become, setBecome] = useState('');
 
     const onSave = (e: any) => {
 
     }
 
+    const onClickAvatar = () => {
+        document.querySelector<HTMLElement>('#file')?.click();
+    }
+
+    const onChangeAvatar = (e: any) => {
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        if (file) {
+            reader.onloadend = () => {
+                setSelectedImage({
+                    file: file,
+                    url: reader.result
+                });
+            }
+            reader.readAsDataURL(file)
+        }
+
+    }
+    console.log(errors)
     return (
         <div className={`${classes.updateInfo} updateInfo`}>
             {!Config.isEmpty(errors) && <div className={classes.error}><InlineSVG src={'/icons/Error.svg'} width={13} height={13} />
                 &nbsp;&nbsp;Vui lòng nhập đầy đủ thông tin!</div>}
-            <div className='avatar' style={{ marginTop: !Config.isEmpty(errors) ? 32 : 0 }}>
-                <div className='avatar_container'>
-                    <div className='left'></div>
-                    <div className='middle'>
-                        <div className='middle-main'><InlineSVG src={'/icons/Add.svg'} width={48} height={48} /></div>
-                    </div>
-                    <div className='right'></div>
-                </div>
-                <input type={'file'} className='hidden'  {...register("avatar", { required: true })} />
-            </div>
-            <div className='fullname'>
-                <TextField
-                    variant='standard'
-                    placeholder="Nhập họ và tên"
-                    fullWidth
-                    {...register("fullname", { required: true })}
-                />
-            </div>
-            <div className='become'>
-                <label>Bạn muốn trở thành</label>
-                <div className='center-row align-between'>
-                    <div className={`kol column mgr10 ${become === 'EMPLOYER' ? 'actived' : ''}`} onClick={() => setBecome('EMPLOYER')}>
-                        <div className='icon'>
-                            <InlineSVG src={become === 'EMPLOYER' ? '/icons/Role_actived.svg' : '/icons/Role.svg'} width={48} height={53} />
-                            {become === 'EMPLOYER' &&
-                                <div className='checked'>
-                                    <InlineSVG src={'/icons/Checked.svg'} width={20} height={20} />
-                                </div>
-                            }
+            <form encType="multipart/form-data">
+                <div className='avatar' style={{ marginTop: !Config.isEmpty(errors) ? 32 : 0 }}>
+                    <div className='avatar_container'>
+                        <div className='left'></div>
+                        <div className='middle' onClick={onClickAvatar}>
+                            <div className='middle-main' style={{ backgroundImage: `url(${selectedImage.url})` }}
+                            ><InlineSVG src={'/icons/Add.svg'} width={48} height={48} /></div>
                         </div>
-                        <span>Người thuê KOL</span>
+                        <div className='right'></div>
                     </div>
-                    <div className={`kol column ${become === 'KOL' ? 'actived' : ''}`} onClick={() => setBecome('KOL')}>
-                        <div className='icon'>
-                            <InlineSVG src={become === 'KOL' ? '/icons/Role_actived.svg' : '/icons/Role.svg'} width={48} height={53} />
-                            {become === 'KOL' &&
-                                <div className='checked'>
-                                    <InlineSVG src={'/icons/Checked.svg'} width={20} height={20} />
-                                </div>
-                            }
+                    <input type={'file'} className='hidden' id="file"  {...register("avatar", { required: true })}
+                        accept="image/*" onChange={onChangeAvatar} />
+                </div>
+                <div className='fullname'>
+                    <TextField
+                        variant='standard'
+                        placeholder="Nhập họ và tên"
+                        fullWidth
+                        {...register("fullname", { required: true })}
+                    />
+                </div>
+                <div className='become'>
+                    <label>Bạn muốn trở thành</label>
+                    <div className='center-row align-between'>
+                        <div className={`kol column mgr10 ${become === 'EMPLOYER' ? 'actived' : ''}`} onClick={() => setBecome('EMPLOYER')}>
+                            <div className='icon'>
+                                <InlineSVG src={become === 'EMPLOYER' ? '/icons/Role_actived.svg' : '/icons/Role.svg'} width={48} height={53} />
+                                {become === 'EMPLOYER' &&
+                                    <div className='checked'>
+                                        <InlineSVG src={'/icons/Checked.svg'} width={20} height={20} />
+                                    </div>
+                                }
+                            </div>
+                            <span>Người thuê KOL</span>
                         </div>
-                        <span>Trở thành KOL</span>
+                        <div className={`kol column ${become === 'KOL' ? 'actived' : ''}`} onClick={() => setBecome('KOL')}>
+                            <div className='icon'>
+                                <InlineSVG src={become === 'KOL' ? '/icons/Role_actived.svg' : '/icons/Role.svg'} width={48} height={53} />
+                                {become === 'KOL' &&
+                                    <div className='checked'>
+                                        <InlineSVG src={'/icons/Checked.svg'} width={20} height={20} />
+                                    </div>
+                                }
+                            </div>
+                            <span>Trở thành KOL</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <Button variant="outlined" className='btn-custom-kol' type='submit' onClick={handleSubmit(onSave)}>
-                Lưu lại
-            </Button>
+                <Button variant="outlined" className='btn-custom-kol' type='submit' onClick={handleSubmit(onSave)}>
+                    Lưu lại
+                </Button>
+            </form>
         </div>
     );
 };

@@ -46,11 +46,7 @@ const useStyle = makeStyles((theme: any) => ({
         padding: '48px 10px',
         textAlign: 'center',
         margin: 'auto',
-        [theme.breakpoints.down("lg")]: {
-            '& .other': {
-                marginTop: '30px !important'
-            }
-        },
+
         [theme.breakpoints.up("sm")]: {
             '& .form-hook ': {
                 width: 400,
@@ -75,7 +71,12 @@ const useStyle = makeStyles((theme: any) => ({
         },
         '& .other': {
             justifyContent: 'center',
-            marginTop: 48,
+            [theme.breakpoints.up("lg")]: {
+                marginTop: 48,
+            },
+            [theme.breakpoints.down("lg")]: {
+                marginTop: 30,
+            },
             '& span': {
                 color: theme.palette.common.Ink.Gray,
             },

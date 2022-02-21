@@ -24,6 +24,8 @@ class Config {
     static env = env;
     static loadingProcess: any = null;
     static theme: any = null;
+    static screenMac = typeof window !== "undefined" && window.innerHeight <= 764;
+    static marginBottmScale = typeof window !== "undefined" && window.innerHeight <= 764 ? 26 : 32;
 
     static menu = [
         { _id: 3, name: 'Sơn nước nội thất', slug: 'son-noi-that', parentId: 0 },
@@ -287,6 +289,10 @@ class Config {
     static sumValue = (arr: Array<any>, key: number) => {
         return arr.reduce((a, b) => a + (b[key] || 0), 0);
     }
+
+    // static screenMac = () => {
+    //     return window.innerHeight <= 764;
+    // }
 }
 
 export default Config;

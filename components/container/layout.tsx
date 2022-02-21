@@ -61,13 +61,12 @@ const Layout = (props: Props) => {
     const login = () => {
         setFlag(!flag);
     }
-    console.log(Config.profile)
     if (loading) return null;
     return (
         <div id='layout' className={classes.root}>
             <Header login={login} />
             <div className='main'>
-                {!Config.profile?.fullName ?
+                {Config.profile && !Config.profile?.fullName ?
                     <UpdateInfo />
                     : <>
                         <div className='main-page'>
