@@ -6,6 +6,7 @@ import { TextField, InputAdornment, IconButton, Button, Drawer } from '@mui/mate
 import Config from '../../config/index';
 import { Menu, Close } from '@mui/icons-material';
 import Auth from '../auth/auth';
+import { useSelector } from 'react-redux';
 
 const useStyle = makeStyles((theme: any) => ({
     header: {
@@ -42,8 +43,9 @@ const useStyle = makeStyles((theme: any) => ({
             marginRight: 10
         },
         '& .btn-login': {
-            backgroundColor: theme.palette.common.Brand.Orange,
-            color: theme.palette.common.Neutral.White
+            backgroundColor: theme.palette.common.Brand.Orange + '!important',
+            color: theme.palette.common.Neutral.White,
+            marginLeft: 10
         },
         '& .menu .actived': {
             fontWeight: 500,
@@ -92,11 +94,20 @@ const useStyle = makeStyles((theme: any) => ({
                 margin: 10
             },
         }
+    },
+    download: {
+        borderRight: '1px solid ' + theme.palette.common.Neutral.Smoke,
     }
 }))
 
-const Header = () => {
+interface Props {
+    login: (e: any) => void
+}
+
+const Header = (props: Props) => {
     const classes = useStyle();
+    const { login } = props;
+    const profile = useSelector((state: any) => state?.setting?.profile);
     const [open, setOpen] = useState(false);
     const [showModalAuth, setShowModalAuth] = useState(false);
     const router = useRouter();
@@ -111,6 +122,12 @@ const Header = () => {
     const onShowModalAuth = () => {
         setShowModalAuth(!showModalAuth)
     }
+
+    const onClose = (boolean = false) => {
+        if (boolean) login();
+        onShowModalAuth();
+    }
+
     return (
         <div className={`header ${classes.header}`}>
             <div className="center-row">
@@ -170,15 +187,20 @@ const Header = () => {
             <IconButton size='small' onClick={onToggle} className="btn-toggle" style={{ marginLeft: 10 }}>
                 {open ? <Close /> : <Menu />}
             </IconButton>
-            <div className="btn-header" style={{ display: 'flex' }}>
-                <Button variant="outlined" className='btn-custom-kol btn-download'
-                    startIcon={<Image src={'/icons/Download.svg'} priority alt='' width={24} height={24} />}>
-                    Tải ứng dụng
-                </Button>
-                <Button variant="outlined" className='btn-custom-kol btn-login' onClick={onShowModalAuth}>
-                    Đăng nhập
-                </Button>
-                {showModalAuth && <Auth onClose={() => onShowModalAuth()} />}
+            <div className="btn-header" style={{ display: 'flex', alignItems: 'center' }}>
+                <div className={classes.download}>
+                    <Button variant="outlined" className='btn-custom-kol btn-download'
+                        startIcon={<Image src={'/icons/Download.svg'} priority alt='' width={24} height={24} />}>
+                        Tải ứng dụng
+                    </Button></div>
+                {!profile ?
+                    <Button variant="outlined" className='btn-custom-kol btn-login' onClick={onShowModalAuth}>
+                        Đăng nhập
+                    </Button>
+                    :
+                    <div className='avatar'><Image src={'/images/avatar_default.svg'} priority alt='' width={48} height={48} /></div>
+                }
+                {showModalAuth && <Auth onClose={onClose} />}
             </div>
         </div>
     );

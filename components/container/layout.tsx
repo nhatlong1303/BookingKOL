@@ -5,7 +5,9 @@ import MainRight from './mainRight';
 import Image from 'next/image';
 import ButtonToTop from './buttonToTop';
 import * as SettingActions from '../../redux/setting/setting_actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import UpdateInfo from '../homePage/updateInfo';
+import Config from '../../config/index';
 
 const useStyle = makeStyles((theme: any) => ({
     root: {
@@ -44,9 +46,11 @@ interface Props {
 }
 const Layout = (props: Props) => {
     const { children } = props;
+    const loading = useSelector((state: any) => state?.setting?.loading);
     const dispatch = useDispatch();
     const classes = useStyle();
     const [mount, setMount] = useState(false);
+    const [flag, setFlag] = useState(false);
 
     useEffect(() => {
         setMount(true);
@@ -54,18 +58,27 @@ const Layout = (props: Props) => {
         /* eslint-disable */
     }, [])
 
-
+    const login = () => {
+        setFlag(!flag);
+    }
+    console.log(Config.profile)
+    if (loading) return null;
     return (
         <div id='layout' className={classes.root}>
-            <Header />
+            <Header login={login} />
             <div className='main'>
-                <div className='main-page'>
-                    <div className='slider' style={{ width: 'fit-content' }}>
-                        <Image src={'/images/sliderads.png'} priority alt='' width={896} height={239} />
-                    </div>
-                    {mount ? children : null}
-                </div>
-                <MainRight />
+                {!Config.profile?.fullName ?
+                    <UpdateInfo />
+                    : <>
+                        <div className='main-page'>
+                            <div className='slider' style={{ width: 'fit-content' }}>
+                                <Image src={'/images/sliderads.png'} priority alt='' width={896} height={239} />
+                            </div>
+                            {mount ? children : null}
+                        </div>
+                        <MainRight />
+                    </>
+                }
             </div>
             <ButtonToTop />
         </div>

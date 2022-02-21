@@ -5,6 +5,8 @@ export const types = {
     REGISTRATION: 'REGISTRATION',
     VERIFICATION: 'VERIFICATION',
     LOGIN: 'LOGIN',
+    LOGIN_SUCCESS: 'LOGIN_SUCCESS',
+    LOADING_SUCCESS: 'LOADING_SUCCESS',
 };
 
 export function getSetting(params?: any, cb?: any) {

@@ -122,17 +122,12 @@ const useStyle = makeStyles((theme: any) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        [theme.breakpoints.up("lg")]: {
-            padding: '18px 0',
-        },
-        [theme.breakpoints.down("lg")]: {
-            padding: '10px 0',
-        },
+        padding: '15px 0',
     }
 }))
 interface Props {
-    onClose: () => void,
-    classes?: any
+    onClose: (e: boolean) => void,
+    classes?: any,
 }
 const Auth = (props: Props) => {
     const { onClose } = props;
@@ -150,9 +145,9 @@ const Component = (props: Props) => {
     const [tab, setTab] = useState(0);
     const deviceSize = useContext(ResizeContext);
     const [isVerify, setIsverify] = useState('');
+
     useEffect(() => {
         if (tab) {
-        console.log(tab)
             setIsverify('')
         }
     }, [tab])
@@ -168,7 +163,7 @@ const Component = (props: Props) => {
         <Modal
             width={col}
             title={''}
-            onClose={onClose}
+            onClose={() => onClose(false)}
             open={true}
             className={classes.auth}
         >
@@ -183,9 +178,9 @@ const Component = (props: Props) => {
                 activeKey={tab}
             >
                 <TabPanel value={tab} index={0}>
-                    {!tab && <SignUp classesProp={classes} setTab={setTab} setIsverify={setIsverify} isVerify={isVerify} />}</TabPanel>
+                    {!tab && <SignUp classesProp={classes} setTab={setTab} setIsverify={setIsverify} isVerify={isVerify} onClose={onClose} />}</TabPanel>
                 <TabPanel value={tab} index={1}>
-                    {tab && <SignIn classesProp={classes} setTab={setTab} setIsverify={setIsverify} />}</TabPanel>
+                    {tab && <SignIn classesProp={classes} setTab={setTab} setIsverify={setIsverify} onClose={onClose} />}</TabPanel>
             </TabContent>
         </Modal>
     )

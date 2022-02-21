@@ -57,13 +57,27 @@
             padding: 5px 15px;
         }
     }
+    .avatar {
+        background-image: url("../public/images/backgroundStory.png");
+        width: 56px;
+        height: 56px;
+        display: flex;
+        justify-content: center;
+        border-radius: 50%;
+        align-items: center;
+        margin-left: 10px;
+        cursor: pointer;
+        img {
+            margin-top: 2px !important;
+        }
+    }
 }
 .btn-custom-kol {
     height: 48px;
-    border-radius: 24px;
-    padding: 0 30px;
+    border-radius: 24px !important;
+    padding: 0 30px !important;
     border: 1px solid $main !important;
-    text-transform: unset;
+    text-transform: unset !important;
 }
 
 .drawer-navbar .MuiDrawer-paper {

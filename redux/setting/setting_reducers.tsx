@@ -1,7 +1,9 @@
 import { types } from "./setting_actions";
 
 const initialState = {
-    areasOfConcern: []
+    areasOfConcern: [],
+    profile: null,
+    loading: true,
 };
 
 interface Action {
@@ -15,7 +17,17 @@ export const setting = (state = initialState, action: Action) => {
         case types.GET_SETTING_COMPLETE:
             return {
                 ...state,
-                areasOfConcern: action.data
+                areasOfConcern: action.data ?? [],
+            }
+        case types.LOGIN_SUCCESS:
+            return {
+                ...state,
+                profile: action.data
+            }
+        case types.LOADING_SUCCESS:
+            return {
+                ...state,
+                loading: action.data
             }
         default:
             return state;

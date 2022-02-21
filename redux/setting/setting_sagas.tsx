@@ -14,6 +14,51 @@ export default function SettingSagas() {
 
 export function* getSetting(data: any) {
     try {
+        const getToken = localStorage.getItem('TOKEN');
+        let _token = {
+            token: null,
+            expire: 0
+        };
+        let expire = 0;
+        if (getToken) {
+            _token = JSON.parse(getToken);
+            expire = _token?.expire ?? 0;
+        }
+        const timer = new Date().getTime();
+        const newDate = new Date().getTime() + 30 * 24 * 60 * 60 * 1000; // 1days
+        if (getToken && expire > timer) {
+            const _expireCal = Math.round((expire - timer) / (1000 * 60 * 60 * 24));
+            console.log('còn ' + _expireCal + ' ngày')
+            Config.token = _token;
+            if (_expireCal > 0.2) {
+                const _getProfile = Config.decryptData(localStorage.getItem('PROFILE'));
+                if (_getProfile) {
+                    const profile = JSON.parse(_getProfile);
+                    Config.profile = profile;
+                    yield put({
+                        type: types.LOGIN_SUCCESS,
+                        data: profile,
+                    });
+                    yield put({
+                        type: types.LOADING_SUCCESS,
+                        data: false,
+                    });
+                }
+            } else {
+                localStorage.removeItem('TOKEN');
+                localStorage.removeItem('PROFILE');
+                yield put({
+                    type: types.LOADING_SUCCESS,
+                    data: false,
+                });
+            }
+
+        } else {
+            yield put({
+                type: types.LOADING_SUCCESS,
+                data: false,
+            });
+        }
         // @ts-ignore
         const areasOfConcern = yield Api.get('/areas-of-concern/list');
         yield put({
@@ -73,6 +118,10 @@ export function* onVerify(data: any) {
         // @ts-ignore
         const response = yield Api.put('/user/email-verification', data.params);
         if (response && response.data) {
+            yield put({
+                type: types.LOGIN_SUCCESS,
+                data: response.data.user,
+            });
             data.cb && data.cb(null, response.data)
         } else {
             data.cb && data.cb(response, null)
@@ -99,6 +148,10 @@ export function* onLogin(data: any) {
         // @ts-ignore
         const response = yield Api.post('/user/login-system', data.params);
         if (response && response.data) {
+            yield put({
+                type: types.LOGIN_SUCCESS,
+                data: response.data.data,
+            });
             data.cb && data.cb(null, response.data)
         } else {
             data.cb && data.cb(response, null)

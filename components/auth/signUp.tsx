@@ -57,10 +57,11 @@ interface Props {
     classesProp: any,
     setTab: (tab: number) => void,
     setIsverify: (e: string) => void,
-    isVerify: string
+    isVerify: string,
+    onClose: (e: boolean) => void
 }
 const SignUp = (props: Props) => {
-    const { classesProp, setTab, setIsverify, isVerify } = props;
+    const { classesProp, setTab, setIsverify, isVerify, onClose } = props;
     const dispatch = useDispatch();
     const classes = useStyle();
     const { register, handleSubmit, watch, formState: { errors }, setValue } = useForm({
@@ -79,6 +80,7 @@ const SignUp = (props: Props) => {
 
     useEffect(() => {
         setValue('email', isVerify)
+        /* eslint-disable */
     }, [isVerify])
 
     const [loading, setLoading] = useState(false);
@@ -126,10 +128,18 @@ const SignUp = (props: Props) => {
                 return;
             }
             setLoading(false);
-            Config.token.token = data.token;
+            const expire = new Date().getTime() + 1 * 24 * 60 * 60 * 1000;
+            Config.token = {
+                token: data.token,
+                expire: expire
+            };
             Config.profile = data.user;
-            localStorage.setItem("PROFILE", String(Config.encryptData(JSON.stringify(data.user))));
-            localStorage.setItem("TOKEN", data.token);
+            const profile = Config.encryptData(JSON.stringify(data.user));
+            if (profile) {
+                localStorage.setItem("PROFILE", profile);
+                localStorage.setItem("TOKEN", JSON.stringify(Config.token));
+                onClose(true);
+            }
         }))
     }
 

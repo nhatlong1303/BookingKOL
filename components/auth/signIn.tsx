@@ -48,13 +48,14 @@ const useStyle = makeStyles((theme: any) => ({
 interface Props {
     classesProp: any,
     setTab: (tab: number) => void,
-    setIsverify: (e: string) => void
+    setIsverify: (e: string) => void,
+    onClose: (e: boolean) => void
 }
 const SignIn = (props: Props) => {
     const dispatch = useDispatch();
     const classes = useStyle();
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const { classesProp, setTab, setIsverify } = props;
+    const { classesProp, setTab, setIsverify, onClose } = props;
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const errorText = useRef('');
@@ -62,6 +63,7 @@ const SignIn = (props: Props) => {
         setLoading(true);
         dispatch(SettingActions.onLogin((e), (error: any, data: any) => {
             if (error) {
+                console.log(error)
                 switch (error.error) {
                     case 'EMAIL_IS_NOT_VERIFIED':
                         setTab(0);
@@ -78,10 +80,18 @@ const SignIn = (props: Props) => {
                 return;
             }
             setLoading(false);
-            Config.token.token = data.token;
+            const expire = new Date().getTime() + 1 * 24 * 60 * 60 * 1000;
+            Config.token = {
+                token: data.token,
+                expire: expire
+            };
             Config.profile = data.data;
-            localStorage.setItem("PROFILE", String(Config.encryptData(JSON.stringify(data.data))));
-            localStorage.setItem("TOKEN", data.token);
+            const profile = Config.encryptData(JSON.stringify(data.data));
+            if (profile) {
+                localStorage.setItem("PROFILE", profile);
+                localStorage.setItem("TOKEN", JSON.stringify(Config.token));
+                onClose(true);
+            }
         }))
     }
 

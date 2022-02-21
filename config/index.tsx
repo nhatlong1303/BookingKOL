@@ -2,7 +2,7 @@ import { isMobile } from "react-device-detect";
 import moment from 'moment';
 import { localize } from '../localize/localize';
 import env from './env';
-import * as CryptoJS from "crypto-js";
+import CryptoJS from 'crypto-js';
 
 interface token {
     token: any,
@@ -18,7 +18,6 @@ class Config {
     static getToken = {};
     static profile: any = null;
     static language: any = '84';
-    static encryptKey = "booking";
     static loading: any = null;
     static notify: any = null;
     static popup: any = null;
@@ -54,11 +53,10 @@ class Config {
         return Config.getRootPath() + url;
     }
 
-    static encryptData = (data: any, encryptKey?: string) => {
+    static encryptData = (data: any) => {
         if (!data || typeof data !== "string") return false;
         try {
-            encryptKey = encryptKey ? encryptKey : this.encryptKey;
-            return CryptoJS.AES.encrypt(data, encryptKey).toString();
+            return CryptoJS.AES.encrypt(data, 'booking').toString();
         } catch (e) {
             console.log("encrypt error", e);
             return false;
@@ -66,11 +64,10 @@ class Config {
     };
 
     //Decrypt data...
-    static decryptData = (data: any, encryptKey?: string, stringDecode = CryptoJS.enc.Utf8) => {
+    static decryptData = (data: any, stringDecode = CryptoJS.enc.Utf8) => {
         if (!data) return null;
         try {
-            encryptKey = encryptKey ? encryptKey : this.encryptKey;
-            return CryptoJS.AES.decrypt(data, encryptKey).toString(stringDecode);
+            return CryptoJS.AES.decrypt(data, 'booking').toString(stringDecode);
         } catch (e) {
             console.log("decrypt error", e);
             return null;
