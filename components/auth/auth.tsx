@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useContext, useMemo, useEffect } from 'react';
 import Modal from '../common/modal/modal';
 import TabContent, { TabPanel } from '../common/tabs/tabContent';
 import { Tabs, Tab } from '@mui/material';
@@ -11,6 +11,11 @@ import { ResizeContext } from '../common/context/context';
 
 const useStyle = makeStyles((theme: any) => ({
     auth: {
+        [theme.breakpoints.down("lg")]: {
+            '& .MuiTabs-flexContainer button': {
+                margin: '5px 0 !important',
+            }
+        },
         '& .MuiPaper-root': {
             borderRadius: 16,
             '& .MuiDialogContent-root': {
@@ -41,21 +46,21 @@ const useStyle = makeStyles((theme: any) => ({
         padding: '48px 10px',
         textAlign: 'center',
         margin: 'auto',
+        [theme.breakpoints.down("lg")]: {
+            '& .other': {
+                marginTop: '30px !important'
+            }
+        },
         [theme.breakpoints.up("sm")]: {
             '& .form-hook ': {
                 width: 400,
             }
         },
-        [theme.breakpoints.down("sm")]: {
-            '& .form-hook ': {
-                width: 300,
-            },
-        },
         '& .title': {
-            padding: '0 10%',
+            padding: '0 15%',
             marginBottom: 32,
             [theme.breakpoints.down("sm")]: {
-                padding: '0 60px',
+                padding: '0 20px',
             },
             '& label': {
                 color: theme.palette.common.Ink.Dark,
@@ -108,6 +113,21 @@ const useStyle = makeStyles((theme: any) => ({
             },
 
         }
+    },
+    error: {
+        backgroundColor: 'rgba(245, 108, 108, 0.1)',
+        color: theme.palette.common.Denotative.Error,
+        fontSize: 14,
+        marginBottom: -20,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        [theme.breakpoints.up("lg")]: {
+            padding: '18px 0',
+        },
+        [theme.breakpoints.down("lg")]: {
+            padding: '10px 0',
+        },
     }
 }))
 interface Props {
@@ -129,6 +149,13 @@ const Component = (props: Props) => {
     const { onClose, classes } = props;
     const [tab, setTab] = useState(0);
     const deviceSize = useContext(ResizeContext);
+    const [isVerify, setIsverify] = useState('');
+    useEffect(() => {
+        if (tab) {
+        console.log(tab)
+            setIsverify('')
+        }
+    }, [tab])
 
     const col = useMemo(() => {
         if (deviceSize === 'xl') {
@@ -155,8 +182,10 @@ const Component = (props: Props) => {
             <TabContent
                 activeKey={tab}
             >
-                <TabPanel value={tab} index={0}><SignUp classesProp={classes} setTab={setTab} /></TabPanel>
-                <TabPanel value={tab} index={1}><SignIn classesProp={classes} setTab={setTab} /></TabPanel>
+                <TabPanel value={tab} index={0}>
+                    {!tab && <SignUp classesProp={classes} setTab={setTab} setIsverify={setIsverify} isVerify={isVerify} />}</TabPanel>
+                <TabPanel value={tab} index={1}>
+                    {tab && <SignIn classesProp={classes} setTab={setTab} setIsverify={setIsverify} />}</TabPanel>
             </TabContent>
         </Modal>
     )

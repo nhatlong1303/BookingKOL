@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import Image from 'next/image';
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import { makeStyles } from '@mui/styles';
+import { useSelector } from 'react-redux';
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 const useStyle = makeStyles((theme: any) => ({
@@ -36,6 +37,7 @@ const useStyle = makeStyles((theme: any) => ({
 
 const Category = () => {
     const classes = useStyle();
+    const areasOfConcern = useSelector((state: any) => state?.setting?.areasOfConcern);
 
     useEffect(() => {
         const wraper = document.querySelector<HTMLElement>('.categories');
@@ -64,21 +66,10 @@ const Category = () => {
                 wrapperClassName={classes.category}
                 onWheel={onWheel}
             >
-                <Card title='Tất cả' itemId='0' />
-                <Card title='Mẫu ảnh' itemId='1' />
-                <Card title='Streamer' itemId='2' />
-                <Card title='PG sự kiện' itemId='3' />
-                <Card title='Reviewer công nghệ' itemId='4' />
-                <Card title='Youtuber' itemId='5' />
-                <Card title='Gamer' itemId='6' />
-                <Card title='Ca sĩ tự do' itemId='7' />
-                <Card title='Mẫu ảnh' itemId='8' />
-                <Card title='Streamer' itemId='9' />
-                <Card title='PG sự kiện' itemId='10' />
-                <Card title='Reviewer công nghệ' itemId='11' />
-                <Card title='Youtuber' itemId='12' />
-                <Card title='Gamer' itemId='13' />
-                <Card title='Ca sĩ tự do' itemId='14' />
+                <Card title='Tất cả' itemId='all' />
+                {areasOfConcern.map((rs:any, i:number) => (
+                    <Card key={i} title={rs.name} itemId={String(i)} />
+                ))}
             </ScrollMenu>
         </div>
     );

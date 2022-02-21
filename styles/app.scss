@@ -160,6 +160,7 @@
         max-height: 360px;
         position: relative;
         overflow: hidden;
+        z-index: 10;
         .avatar {
             span {
                 height: 100% !important;
@@ -182,6 +183,7 @@
                 opacity: 0;
                 -webkit-transform: translate3d(0, 50%, 0);
                 transform: translate3d(0, 50%, 0);
+                overflow: hidden;
             }
             .profile-main {
                 position: absolute;

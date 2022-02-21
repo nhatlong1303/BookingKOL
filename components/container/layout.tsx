@@ -4,6 +4,8 @@ import Header from './header';
 import MainRight from './mainRight';
 import Image from 'next/image';
 import ButtonToTop from './buttonToTop';
+import * as SettingActions from '../../redux/setting/setting_actions';
+import { useDispatch } from 'react-redux';
 
 const useStyle = makeStyles((theme: any) => ({
     root: {
@@ -42,11 +44,13 @@ interface Props {
 }
 const Layout = (props: Props) => {
     const { children } = props;
+    const dispatch = useDispatch();
     const classes = useStyle();
     const [mount, setMount] = useState(false);
 
     useEffect(() => {
         setMount(true);
+        dispatch(SettingActions.getSetting());
         /* eslint-disable */
     }, [])
 
