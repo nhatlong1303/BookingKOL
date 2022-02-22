@@ -6,6 +6,8 @@ export const types = {
     VERIFICATION: 'VERIFICATION',
     LOGIN: 'LOGIN',
     LOGIN_SUCCESS: 'LOGIN_SUCCESS',
+    LOGOUT: 'LOGOUT',
+    LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
     LOADING_SUCCESS: 'LOADING_SUCCESS',
 };
 
@@ -41,6 +43,13 @@ export function onLogin(params?: any, cb?: any) {
     }
 }
 
+export function onLogout(params?: any, cb?: any) {
+    return {
+        type: types.LOGOUT,
+        params,
+        cb
+    }
+}
 
 
 

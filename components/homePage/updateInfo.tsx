@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import InlineSVG from "react-inlinesvg";
 import { TextField, Button } from '@mui/material';
@@ -19,13 +19,13 @@ const useStyle = makeStyles((theme: any) => ({
         },
         '& .avatar': {
             padding: '0 64px',
-            marginBottom: Config.marginBottmScale,
+            marginBottom: Config.scale(32),
             display: 'flex',
             justifyContent: 'center',
             cursor: 'pointer',
             '& .avatar_container': {
-                width: Config.screenMac ? 162 : 192,
-                height: Config.screenMac ? 162 : 192,
+                width: Config.scale(192, 30),
+                height: Config.scale(192, 30),
                 display: 'flex',
                 position: 'relative',
                 alignItems: 'center',
@@ -33,8 +33,8 @@ const useStyle = makeStyles((theme: any) => ({
             },
             '& .left': {
                 background: theme.palette.common.Gradient.Sunset,
-                width: Config.screenMac ? 108 : 128,
-                height: Config.screenMac ? 108 : 128,
+                width: Config.scale(128, 20),
+                height: Config.scale(128, 20),
                 borderRadius: '50%',
                 position: 'absolute',
                 left: 0,
@@ -43,8 +43,8 @@ const useStyle = makeStyles((theme: any) => ({
             },
             '& .right': {
                 background: theme.palette.common.Gradient.Sunshine,
-                width: Config.screenMac ? 108 : 128,
-                height: Config.screenMac ? 108 : 128,
+                width: Config.scale(128, 20),
+                height: Config.scale(128, 20),
                 borderRadius: '50%',
                 position: 'absolute',
                 right: 0,
@@ -53,8 +53,8 @@ const useStyle = makeStyles((theme: any) => ({
             },
             '& .middle': {
                 backgroundColor: theme.palette.common.Neutral.White,
-                width: Config.screenMac ? 140 : 160,
-                height: Config.screenMac ? 140 : 160,
+                width: Config.scale(160, 20),
+                height: Config.scale(160, 20),
                 borderRadius: '50%',
                 boxShadow: '0px 3px 8px rgba(102, 102, 102, 0.24)',
                 display: 'flex',
@@ -64,8 +64,11 @@ const useStyle = makeStyles((theme: any) => ({
                 zIndex: 2,
                 '& .middle-main': {
                     backgroundColor: theme.palette.common.Neutral.Smoke,
-                    width: Config.screenMac ? 130 : 150,
-                    height: Config.screenMac ? 130 : 150,
+                    backgroundPosition: 'center center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    width: Config.scale(150, 20),
+                    height: Config.scale(150, 20),
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
@@ -74,31 +77,31 @@ const useStyle = makeStyles((theme: any) => ({
             }
         },
         '& .fullname': {
-            marginBottom: Config.marginBottmScale,
+            marginBottom: Config.scale(32),
             '& input': {
                 textAlign: 'center',
                 fontWeight: 500,
-                fontSize: Config.screenMac ? 18 : 32
+                fontSize: Config.scale(32, 14),
             }
         },
         '& .become': {
             color: theme.palette.common.Ink.Dark,
             textAlign: 'center',
-            marginBottom: Config.marginBottmScale,
+            marginBottom: Config.scale(32),
             padding: '0 10px',
             '& label': {
-                fontSize: Config.screenMac ? 16 : 20,
-                marginBottom: Config.marginBottmScale
+                fontSize: Config.scale(20, 4),
+                marginBottom: Config.scale(32),
             },
             '& .kol': {
                 cursor: 'pointer',
-                width: Config.screenMac ? 147 : 167,
-                height: Config.screenMac ? 147 : 167,
+                width: Config.scale(167, 20),
+                height: Config.scale(167, 20),
                 borderRadius: 24,
                 boxShadow: '0px 2px 16px rgba(158, 158, 158, 0.16)',
                 justifyContent: 'center',
                 '& span': {
-                    fontSize: Config.screenMac ? 14 : 16,
+                    fontSize: Config.scale(16, 2),
                     fontWeight: 500,
                     marginTop: 20
                 },
@@ -139,12 +142,22 @@ const useStyle = makeStyles((theme: any) => ({
 }))
 const UpdateInfo = () => {
     const classes = useStyle();
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const [selectedImage, setSelectedImage] = useState<any>({ file: null, url: null });
-    const [become, setBecome] = useState('');
+    const [type, setType] = useState('');
+
+    useEffect(() => {
+        setValue('type', type);
+        /* eslint-disable */
+    }, [type])
+
+    useEffect(() => {
+        setValue('avatar', selectedImage.file);
+        /* eslint-disable */
+    }, [selectedImage])
 
     const onSave = (e: any) => {
-
+        console.log(e)
     }
 
     const onClickAvatar = () => {
@@ -165,7 +178,7 @@ const UpdateInfo = () => {
         }
 
     }
-    console.log(errors)
+
     return (
         <div className={`${classes.updateInfo} updateInfo`}>
             {!Config.isEmpty(errors) && <div className={classes.error}><InlineSVG src={'/icons/Error.svg'} width={13} height={13} />
@@ -176,12 +189,12 @@ const UpdateInfo = () => {
                         <div className='left'></div>
                         <div className='middle' onClick={onClickAvatar}>
                             <div className='middle-main' style={{ backgroundImage: `url(${selectedImage.url})` }}
-                            ><InlineSVG src={'/icons/Add.svg'} width={48} height={48} /></div>
+                            > {!selectedImage.url && <InlineSVG src={'/icons/Add.svg'} width={48} height={48} />}</div>
                         </div>
                         <div className='right'></div>
                     </div>
-                    <input type={'file'} className='hidden' id="file"  {...register("avatar", { required: true })}
-                        accept="image/*" onChange={onChangeAvatar} />
+                    <input type={'file'} className='hidden' id="file" accept="image/*" onChange={onChangeAvatar} />
+                    <input className='hidden' {...register("avatar", { required: true })} />
                 </div>
                 <div className='fullname'>
                     <TextField
@@ -193,11 +206,12 @@ const UpdateInfo = () => {
                 </div>
                 <div className='become'>
                     <label>Bạn muốn trở thành</label>
+                    <input className='hidden' {...register("type", { required: true })} />
                     <div className='center-row align-between'>
-                        <div className={`kol column mgr10 ${become === 'EMPLOYER' ? 'actived' : ''}`} onClick={() => setBecome('EMPLOYER')}>
+                        <div className={`kol column mgr10 ${type === 'EMPLOYER' ? 'actived' : ''}`} onClick={() => setType('EMPLOYER')}>
                             <div className='icon'>
-                                <InlineSVG src={become === 'EMPLOYER' ? '/icons/Role_actived.svg' : '/icons/Role.svg'} width={48} height={53} />
-                                {become === 'EMPLOYER' &&
+                                <InlineSVG src={type === 'EMPLOYER' ? '/icons/Role_actived.svg' : '/icons/Role.svg'} width={48} height={53} />
+                                {type === 'EMPLOYER' &&
                                     <div className='checked'>
                                         <InlineSVG src={'/icons/Checked.svg'} width={20} height={20} />
                                     </div>
@@ -205,10 +219,10 @@ const UpdateInfo = () => {
                             </div>
                             <span>Người thuê KOL</span>
                         </div>
-                        <div className={`kol column ${become === 'KOL' ? 'actived' : ''}`} onClick={() => setBecome('KOL')}>
+                        <div className={`kol column ${type === 'KOL' ? 'actived' : ''}`} onClick={() => setType('KOL')}>
                             <div className='icon'>
-                                <InlineSVG src={become === 'KOL' ? '/icons/Role_actived.svg' : '/icons/Role.svg'} width={48} height={53} />
-                                {become === 'KOL' &&
+                                <InlineSVG src={type === 'KOL' ? '/icons/Role_actived.svg' : '/icons/Role.svg'} width={48} height={53} />
+                                {type === 'KOL' &&
                                     <div className='checked'>
                                         <InlineSVG src={'/icons/Checked.svg'} width={20} height={20} />
                                     </div>

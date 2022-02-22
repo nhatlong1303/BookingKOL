@@ -101,12 +101,15 @@ const useStyle = makeStyles((theme: any) => ({
 }))
 
 interface Props {
-    login: (e: any) => void
+    login: () => void,
+    onChangeTab: (e: string) => void,
+    tab: string,
+    onLogout: () => void
 }
 
 const Header = (props: Props) => {
     const classes = useStyle();
-    const { login } = props;
+    const { login, onChangeTab, tab, onLogout } = props;
     const profile = useSelector((state: any) => state?.setting?.profile);
     const [open, setOpen] = useState(false);
     const [showModalAuth, setShowModalAuth] = useState(false);
@@ -150,10 +153,10 @@ const Header = (props: Props) => {
                 />
             </div>
             <ul className='menu menu-desktop'>
-                <li className='actived'>Trang chủ</li>
-                <li>Thống kê</li>
-                <li>Tin tức</li>
-                <li>Liên hệ</li>
+                <li className={tab === '/' ? 'actived' : ''} onClick={() => onChangeTab('')} >Trang chủ</li>
+                <li className={tab === 'statistical' ? 'actived' : ''} onClick={() => onChangeTab('statistical')}>Thống kê</li>
+                <li className={tab === 'posts' ? 'actived' : ''} onClick={() => onChangeTab('posts')}>Tin tức</li>
+                <li className={tab === 'contact' ? 'actived' : ''} onClick={() => onChangeTab('contact')}>Liên hệ</li>
             </ul>
             <Drawer
                 anchor={'left'}
@@ -198,11 +201,11 @@ const Header = (props: Props) => {
                         Đăng nhập
                     </Button>
                     :
-                    <div className='avatar'><Image src={'/images/avatar_default.svg'} priority alt='' width={48} height={48} /></div>
+                    <div className='avatar'><Image src={'/images/avatar_default.svg'} priority alt='' width={48} height={48} onClick={onLogout} /></div>
                 }
                 {showModalAuth && <Auth onClose={onClose} />}
             </div>
-        </div>
+        </div >
     );
 };
 

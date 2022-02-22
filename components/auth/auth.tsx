@@ -38,9 +38,6 @@ const useStyle = makeStyles((theme: any) => ({
                 }
             }
         },
-        '& .text-field': {
-            backgroundColor: theme.palette.common.Neutral.Smoke
-        }
     },
     general: {
         padding: '48px 10px',
@@ -87,6 +84,7 @@ const useStyle = makeStyles((theme: any) => ({
         '& .form-hook': {
             margin: 'auto',
             '& .text-field': {
+                backgroundColor: theme.palette.common.Neutral.Smoke,
                 marginBottom: 16,
                 '&:focus': {
                     border: '1px solid' + theme.palette.common.Brand.Orange,

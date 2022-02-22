@@ -9,6 +9,7 @@ import * as SettingActions from '../../redux/setting/setting_actions';
 import { useDispatch } from 'react-redux';
 import InlineSVG from "react-inlinesvg";
 import Config from '../../config/index';
+import { useRouter } from 'next/router';
 
 const useStyle = makeStyles((theme: any) => ({
     other: {
@@ -38,6 +39,7 @@ const useStyle = makeStyles((theme: any) => ({
     forgotPassword: {
         marginTop: 48,
         marginBottom: -32,
+        cursor: 'pointer',
         color: theme.palette.common.Brand.Orange,
         [theme.breakpoints.down("lg")]: {
             marginTop: '28px !important',
@@ -54,6 +56,7 @@ interface Props {
 const SignIn = (props: Props) => {
     const dispatch = useDispatch();
     const classes = useStyle();
+    const router = useRouter();
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const { classesProp, setTab, setIsverify, onClose } = props;
     const [showPassword, setShowPassword] = useState(false);
@@ -93,6 +96,11 @@ const SignIn = (props: Props) => {
                 onClose(true);
             }
         }))
+    }
+
+    const onForgot = () => {
+        router.push('/forgotPassword');
+        onClose(false);
     }
 
     const { password } = watch();
@@ -150,7 +158,7 @@ const SignIn = (props: Props) => {
                         </Button>
                     </div>
                 </div>
-                <div className={classes.forgotPassword}>Quên mật khẩu?</div>
+                <div className={classes.forgotPassword} onClick={onForgot}>Quên mật khẩu?</div>
                 <div className='other center-row'><span>Chưa có tài khoản? &nbsp;</span><div className='cursor-pointer' onClick={() => setTab(0)}>Tạo tài khoản</div></div>
             </div>
         </div>

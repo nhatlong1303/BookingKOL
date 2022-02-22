@@ -25,11 +25,17 @@ const useStyle = makeStyles((theme: any) => ({
             border: '1px solid' + theme.palette.common.Ink.Cement,
             borderRadius: 24,
             fontSize: 14,
-            padding: '14px 16px',
+            padding: '0 16px',
             whiteSpace: 'nowrap',
             height: 48,
             cursor: 'pointer',
             margin: '0 5px',
+            display: 'flex',
+            alignItems: 'center',
+            [theme.breakpoints.down("sm")]: {
+                fontSize: 12,
+                height: 40,
+            },
 
         }
     }
@@ -67,7 +73,7 @@ const Category = () => {
                 onWheel={onWheel}
             >
                 <Card title='Tất cả' itemId='all' />
-                {areasOfConcern.map((rs:any, i:number) => (
+                {areasOfConcern.map((rs: any, i: number) => (
                     <Card key={i} title={rs.name} itemId={String(i)} />
                 ))}
             </ScrollMenu>

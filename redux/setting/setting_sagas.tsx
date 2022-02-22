@@ -8,7 +8,8 @@ export default function SettingSagas() {
         watchGetSetting(),
         watchOnRegister(),
         watchOnVerify(),
-        watchOnLogin()
+        watchOnLogin(),
+        watchOnLogout()
     ];
 }
 
@@ -39,11 +40,11 @@ export function* getSetting(data: any) {
                         type: types.LOGIN_SUCCESS,
                         data: profile,
                     });
-                    yield put({
-                        type: types.LOADING_SUCCESS,
-                        data: false,
-                    });
                 }
+                yield put({
+                    type: types.LOADING_SUCCESS,
+                    data: false,
+                });
             } else {
                 localStorage.removeItem('TOKEN');
                 localStorage.removeItem('PROFILE');
@@ -81,7 +82,7 @@ export function* watchGetSetting() {
     while (true) {
         // @ts-ignore
         const watcher = yield takeLatest(types.GET_SETTING, getSetting);
-        yield take(['LOGOUT', 'NETWORK']);
+        yield take(['NETWORK']);
         yield cancel(watcher);
     }
 }
@@ -107,7 +108,7 @@ export function* watchOnRegister() {
     while (true) {
         // @ts-ignore
         const watcher = yield takeLatest(types.REGISTRATION, onRegister);
-        yield take(['LOGOUT', 'NETWORK']);
+        yield take(['NETWORK']);
         yield cancel(watcher);
     }
 }
@@ -136,7 +137,7 @@ export function* watchOnVerify() {
     while (true) {
         // @ts-ignore
         const watcher = yield takeLatest(types.VERIFICATION, onVerify);
-        yield take(['LOGOUT', 'NETWORK']);
+        yield take(['NETWORK']);
         yield cancel(watcher);
     }
 }
@@ -166,7 +167,38 @@ export function* watchOnLogin() {
     while (true) {
         // @ts-ignore
         const watcher = yield takeLatest(types.LOGIN, onLogin);
-        yield take(['LOGOUT', 'NETWORK']);
+        yield take(['NETWORK']);
         yield cancel(watcher);
     }
 }
+
+
+export function* onLogout(data: any) {
+    try {
+        localStorage.removeItem('PROFILE');
+        localStorage.removeItem('TOKEN');
+        Config.token = {
+            token: null,
+            expire: 0
+        }
+        Config.profile = null;
+        yield put({
+            type: types.LOGOUT_SUCCESS,
+            data: null,
+        });
+        data.cb && data.cb()
+    }
+    catch (e) {
+        console.log('onLogout is error');
+    }
+
+}
+export function* watchOnLogout() {
+    while (true) {
+        // @ts-ignore
+        const watcher = yield takeLatest(types.LOGOUT, onLogout);
+        yield take(['NETWORK']);
+        yield cancel(watcher);
+    }
+}
+

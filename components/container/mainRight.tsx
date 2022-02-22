@@ -1,6 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { makeStyles } from '@mui/styles';
+import { Button } from '@mui/material';
+
 const useStyle = makeStyles((theme: any) => ({
     title: {
         color: theme.palette.common.Ink.Dark,
@@ -26,14 +28,70 @@ const useStyle = makeStyles((theme: any) => ({
         color: theme.palette.common.Ink.Gray,
         fontSize: 12,
         marginBottom: 32
+    },
+    adsRight: {
+        borderRadius: 16,
+        position: 'relative',
+        '& img': {
+            borderRadius: 16,
+        },
+        '& .column': {
+            position: 'absolute',
+            bottom: 20,
+            left: 20,
+            right: 20,
+            [theme.breakpoints.down("md")]: {
+                display: 'none'
+            },
+            '& label': {
+                background: theme.palette.common.Gradient.Aurora,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontSize: 32,
+                fontWeight: 500,
+                [theme.breakpoints.down("lg")]: {
+                    fontSize: 28,
+                },
+                [theme.breakpoints.down("md")]: {
+                    display: 'none'
+                },
+            },
+            '& span': {
+                fontSize: 14,
+                fontWeight: 500,
+                paddingBottom: 10,
+                color: theme.palette.common.Ink.Dark,
+                [theme.breakpoints.down("lg")]: {
+                    display: 'none'
+                },
+            },
+            '& button': {
+                backgroundColor: theme.palette.common.Brand.Orange,
+                color: theme.palette.common.Neutral.White,
+                width: 'max-content',
+                [theme.breakpoints.down("lg")]: {
+                    height: 40,
+                    width: '100%',
+                    fontSize: 14,
+                    padding: '0 10px !important',
+                },
+            }
+        }
     }
 }))
 const MainRight = () => {
     const classes = useStyle();
     return (
         <div className='main-right'>
-            <div>
-                <Image src={'/images/become-KOL.png'} priority alt='' width={272} height={330} />
+            <div className={classes.adsRight}>
+                <Image src={'/images/ads_right.png'} priority alt='' width={272} height={330} />
+                <div className="column">
+                    <label >Booking KOL</label>
+                    <span>Nền tảng giúp KOL quảng bá bản thân đến gần hơn với khách hàng!</span>
+                    <Button variant="outlined" className='btn-custom-kol' >
+                        Trở thành KOL
+                    </Button>
+                </div>
             </div>
             <div className={classes.title}>KOL mới nhất</div>
             <div className={`list-kols ${classes.kols}`}>

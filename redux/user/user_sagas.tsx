@@ -5,7 +5,7 @@ import Api from "../../services/api";
 export default function UserSagas() {
     return [
         watchOnUpdateUser(),
-       
+
     ];
 }
 
@@ -29,7 +29,7 @@ export function* watchOnUpdateUser() {
     while (true) {
         // @ts-ignore
         const watcher = yield takeLatest(types.UPDATE_USER, onUpdateUser);
-        yield take(['LOGOUT', 'NETWORK']);
+        yield take(['NETWORK']);
         yield cancel(watcher);
     }
 }

@@ -20,6 +20,7 @@ export const setting = (state = initialState, action: Action) => {
                 areasOfConcern: action.data ?? [],
             }
         case types.LOGIN_SUCCESS:
+        case types.LOGOUT_SUCCESS:
             return {
                 ...state,
                 profile: action.data
