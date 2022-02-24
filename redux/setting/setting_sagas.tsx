@@ -9,7 +9,8 @@ export default function SettingSagas() {
         watchOnRegister(),
         watchOnVerify(),
         watchOnLogin(),
-        watchOnLogout()
+        watchOnLogout(),
+        watchOnUpload()
     ];
 }
 
@@ -87,7 +88,6 @@ export function* watchGetSetting() {
     }
 }
 
-
 export function* onRegister(data: any) {
     try {
         yield delay(300);
@@ -142,7 +142,6 @@ export function* watchOnVerify() {
     }
 }
 
-
 export function* onLogin(data: any) {
     try {
         yield delay(300);
@@ -172,7 +171,6 @@ export function* watchOnLogin() {
     }
 }
 
-
 export function* onLogout(data: any) {
     try {
         localStorage.removeItem('PROFILE');
@@ -201,4 +199,31 @@ export function* watchOnLogout() {
         yield cancel(watcher);
     }
 }
+
+
+export function* onUpload(data: any) {
+    try {
+        yield delay(300);
+        // @ts-ignore
+        const response = yield Api.post('/users/upload-image', data.params);
+        if (response && response.data) {
+            data.cb && data.cb(null, response.data)
+        } else {
+            data.cb && data.cb(response, null)
+        }
+    }
+    catch (e) {
+        console.log('onUpload is error');
+    }
+
+}
+export function* watchOnUpload() {
+    while (true) {
+        // @ts-ignore
+        const watcher = yield takeLatest(types.UPLOAD_IMAGE, onUpload);
+        yield take(['NETWORK']);
+        yield cancel(watcher);
+    }
+}
+
 

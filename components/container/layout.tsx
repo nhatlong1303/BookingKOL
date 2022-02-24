@@ -111,14 +111,14 @@ const Layout = (props: Props) => {
         setTab(path);
         router.push(`/${path}`);
     }
-    const forgotPassword = router.pathname = '/forgotPassword';
+    const forgotPassword = router.pathname === '/forgotPassword';
     if (loading) return null;
-    
+
     return (
         <div id='layout' className={classes.root}>
             <Header login={login} onChangeTab={onChangeTab} tab={tab} onLogout={onLogout} />
             <div className='main'>
-                {Config.profile && !Config.profile?.fullName ?
+                {Config.profile && !Config.profile?.profile?.fullName ?
                     <UpdateInfo />
                     :
                     forgotPassword ? children : <>

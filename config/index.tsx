@@ -51,7 +51,7 @@ class Config {
     }
 
     static getImage(url: string) {
-        return Config.getRootPath() + url;
+        return url ? this.env.api + url : null;
     }
 
     static encryptData = (data: any) => {

@@ -50,32 +50,8 @@ const PopoverActions = ((props: Props, ref: any) => {
             anchorEl={target.current}
             anchorOrigin={_anchorOrigin}
             transformOrigin={_transformOrigin}
-            PaperProps={{
-                style: {
-                    backgroundColor: "transparent",
-                    // boxShadow: "none",
-                    // borderRadius: 0
-                }
-            }}
         >
             <div className="popover-actions">
-                <Box
-                    sx={{
-                        position: "relative",
-                        mt: "10px",
-                        "&::before": {
-                            backgroundColor: "white",
-                            content: '""',
-                            display: "block",
-                            position: "absolute",
-                            width: 12,
-                            height: 12,
-                            top: -6,
-                            transform: "rotate(45deg)",
-                            left: `calc(${isCenter ? '50%' : '80%'} - 6px)`
-                        }
-                    }}
-                />
                 {children}
             </div>
         </Popover>

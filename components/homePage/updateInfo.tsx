@@ -4,6 +4,9 @@ import InlineSVG from "react-inlinesvg";
 import { TextField, Button } from '@mui/material';
 import { useForm } from "react-hook-form";
 import Config from '../../config';
+import * as UserActions from '../../redux/user/user_actions';
+import * as SettingActions from '../../redux/setting/setting_actions';
+import { useDispatch } from 'react-redux';
 
 const useStyle = makeStyles((theme: any) => ({
     updateInfo: {
@@ -142,6 +145,7 @@ const useStyle = makeStyles((theme: any) => ({
 }))
 const UpdateInfo = () => {
     const classes = useStyle();
+    const dispatch = useDispatch();
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const [selectedImage, setSelectedImage] = useState<any>({ file: null, url: null });
     const [type, setType] = useState('');
@@ -152,12 +156,25 @@ const UpdateInfo = () => {
     }, [type])
 
     useEffect(() => {
-        setValue('avatar', selectedImage.file);
+        setValue('imgPortrait', selectedImage.file);
         /* eslint-disable */
     }, [selectedImage])
 
     const onSave = (e: any) => {
-        console.log(e)
+        const formData = new FormData();
+        formData?.append('files', selectedImage.file);
+        dispatch(SettingActions.onUpload(formData, (error: any, data: any) => {
+            if (error) {
+                return;
+            }
+            const params = {
+                ...e,
+                imgPortrait: data[0]
+            }
+            dispatch(UserActions.onUpdateUser(params, (error: any, data: any) => {
+                console.log(data)
+            }))
+        }))
     }
 
     const onClickAvatar = () => {
@@ -194,14 +211,14 @@ const UpdateInfo = () => {
                         <div className='right'></div>
                     </div>
                     <input type={'file'} className='hidden' id="file" accept="image/*" onChange={onChangeAvatar} />
-                    <input className='hidden' {...register("avatar", { required: true })} />
+                    <input className='hidden' {...register("imgPortrait", { required: true })} />
                 </div>
                 <div className='fullname'>
                     <TextField
                         variant='standard'
                         placeholder="Nhập họ và tên"
                         fullWidth
-                        {...register("fullname", { required: true })}
+                        {...register("fullName", { required: true })}
                     />
                 </div>
                 <div className='become'>

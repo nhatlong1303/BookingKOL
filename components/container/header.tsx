@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { makeStyles } from '@mui/styles';
 import Image from 'next/image';
@@ -7,6 +7,8 @@ import Config from '../../config/index';
 import { Menu, Close } from '@mui/icons-material';
 import Auth from '../auth/auth';
 import { useSelector } from 'react-redux';
+import PopoverActions from '../common/popover/popoverActions';
+
 
 const useStyle = makeStyles((theme: any) => ({
     header: {
@@ -97,6 +99,10 @@ const useStyle = makeStyles((theme: any) => ({
     },
     download: {
         borderRight: '1px solid ' + theme.palette.common.Neutral.Smoke,
+    },
+    profile: {
+        minWidth: 200,
+        padding: 20
     }
 }))
 
@@ -111,6 +117,7 @@ const Header = (props: Props) => {
     const classes = useStyle();
     const { login, onChangeTab, tab, onLogout } = props;
     const profile = useSelector((state: any) => state?.setting?.profile);
+    const profileRef = useRef<any>(null);
     const [open, setOpen] = useState(false);
     const [showModalAuth, setShowModalAuth] = useState(false);
     const router = useRouter();
@@ -131,6 +138,15 @@ const Header = (props: Props) => {
         onShowModalAuth();
     }
 
+    const _onLogout = () => {
+        if (profileRef.current) profileRef.current.hide();
+        onLogout();
+    }
+
+    const onOpenProfile = (e: any) => {
+        const target = e.currentTarget;
+        if (profileRef.current) profileRef.current.show(target);
+    }
     return (
         <div className={`header ${classes.header}`}>
             <div className="center-row">
@@ -201,9 +217,28 @@ const Header = (props: Props) => {
                         Đăng nhập
                     </Button>
                     :
-                    <div className='avatar'><Image src={'/images/avatar_default.svg'} priority alt='' width={48} height={48} onClick={onLogout} /></div>
+                    <div className='avatar'>
+                        <Image src={Config.getImage(profile?.profile?.imgPortrait) ?? '/images/avatar_default.svg'} priority alt='' width={48} height={48} onClick={onOpenProfile} />
+                    </div>
                 }
                 {showModalAuth && <Auth onClose={onClose} />}
+                <PopoverActions
+                    ref={profileRef}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                >
+                    <div className={classes.profile} >
+                        <Button variant="outlined" className='btn-custom-kol' onClick={_onLogout}>
+                            Đăng xuất
+                        </Button>
+                    </div>
+                </PopoverActions>
             </div>
         </div >
     );

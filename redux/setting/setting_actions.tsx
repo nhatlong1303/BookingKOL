@@ -9,6 +9,7 @@ export const types = {
     LOGOUT: 'LOGOUT',
     LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
     LOADING_SUCCESS: 'LOADING_SUCCESS',
+    UPLOAD_IMAGE: 'UPLOAD_IMAGE',
 };
 
 export function getSetting(params?: any, cb?: any) {
@@ -46,6 +47,14 @@ export function onLogin(params?: any, cb?: any) {
 export function onLogout(params?: any, cb?: any) {
     return {
         type: types.LOGOUT,
+        params,
+        cb
+    }
+}
+
+export function onUpload(params?: any, cb?: any) {
+    return {
+        type: types.UPLOAD_IMAGE,
         params,
         cb
     }

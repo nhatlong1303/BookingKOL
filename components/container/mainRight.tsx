@@ -18,7 +18,7 @@ const useStyle = makeStyles((theme: any) => ({
         '& .address': {
             color: theme.palette.common.Ink.Gray,
         },
-        [theme.breakpoints.down("md")]: {
+        [theme.breakpoints.down("sm")]: {
             '& .info': {
                 display: 'none !important'
             },
@@ -30,6 +30,14 @@ const useStyle = makeStyles((theme: any) => ({
         marginBottom: 32
     },
     adsRight: {
+        [theme.breakpoints.up("sm")]: {
+           minWidth:200,
+           minHeight:250
+        },
+        [theme.breakpoints.down("sm")]: {
+            display: 'none'
+
+        },
         borderRadius: 16,
         position: 'relative',
         '& img': {
@@ -40,9 +48,6 @@ const useStyle = makeStyles((theme: any) => ({
             bottom: 20,
             left: 20,
             right: 20,
-            [theme.breakpoints.down("md")]: {
-                display: 'none'
-            },
             '& label': {
                 background: theme.palette.common.Gradient.Aurora,
                 WebkitBackgroundClip: "text",
@@ -52,18 +57,12 @@ const useStyle = makeStyles((theme: any) => ({
                 [theme.breakpoints.down("lg")]: {
                     fontSize: 28,
                 },
-                [theme.breakpoints.down("md")]: {
-                    display: 'none'
-                },
             },
             '& span': {
                 fontSize: 14,
                 fontWeight: 500,
                 paddingBottom: 10,
                 color: theme.palette.common.Ink.Dark,
-                [theme.breakpoints.down("lg")]: {
-                    display: 'none'
-                },
             },
             '& button': {
                 backgroundColor: theme.palette.common.Brand.Orange,
