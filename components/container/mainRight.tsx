@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import * as UsersActions from '../../redux/user/user_actions';
+import Config from '../../config/index';
+import { useRouter } from 'next/router';
 
 const useStyle = makeStyles((theme: any) => ({
     title: {
@@ -31,12 +35,11 @@ const useStyle = makeStyles((theme: any) => ({
     },
     adsRight: {
         [theme.breakpoints.up("sm")]: {
-           minWidth:200,
-           minHeight:250
+            minWidth: 220,
+            minHeight: 250
         },
         [theme.breakpoints.down("sm")]: {
             display: 'none'
-
         },
         borderRadius: 16,
         position: 'relative',
@@ -80,6 +83,30 @@ const useStyle = makeStyles((theme: any) => ({
 }))
 const MainRight = () => {
     const classes = useStyle();
+    const dispatch = useDispatch();
+    const [users, setUsers] = useState([]);
+    const router = useRouter();
+
+    useEffect(() => {
+        getUsers();
+        /* eslint-disable */
+    }, [])
+
+    const getUsers = () => {
+        dispatch(UsersActions.onFindUsers({ limit: 10, skip: 0 }, (error: any, data: any) => {
+            if (error) {
+                console.log(error)
+                return;
+            }
+            setUsers(data.docs);
+        }))
+    }
+
+    const onReading = (id: any) => {
+        router.push('/posts/' + id);
+    }
+
+
     return (
         <div className='main-right'>
             <div className={classes.adsRight}>
@@ -94,35 +121,17 @@ const MainRight = () => {
             </div>
             <div className={classes.title}>KOL mới nhất</div>
             <div className={`list-kols ${classes.kols}`}>
-                <div className='item-kol'>
-                    <div className='avatar'><Image src={'/images/avatar.png'} priority alt='' width={49} height={49} /></div>
-                    <div className='info'>
-                        <span className='username'>Hoàng Thùy Linh</span>
-                        <span className='address'>Hà Nội</span>
+                {users.map((user: any, i: number) => (
+                    <div className='item-kol' key={i} onClick={() => onReading(user?._id)}>
+                        <div className='avatar'>
+                            <Image src={Config.getImage(user?.profile?.imgPortrait) ?? '/images/avatar.png'} priority alt='' width={49} height={49} />
+                        </div>
+                        <div className='info'>
+                            <span className='username'>{user?.profile?.fullName}</span>
+                            <span className='address'>{user?.profile?.province}</span>
+                        </div>
                     </div>
-                </div>
-                <div className='item-kol'>
-                    <div className='avatar'> </div>
-                    <div className='info'>
-                        <span className='username'>Hoàng Thùy Linh</span>
-                        <span className='address'>Hà Nội</span>
-                    </div>
-                </div>
-                <div className='item-kol'>
-                    <div className='avatar'> </div>
-                    <div className='info'>
-                        <span className='username'>Hoàng Thùy Linh</span>
-                        <span className='address'>Hà Nội</span>
-                    </div>
-                </div>
-                <div className='item-kol'>
-                    <div className='avatar'> </div>
-                    <div className='info'>
-                        <span className='username'>Hoàng Thùy Linh</span>
-                        <span className='address'>Hà Nội</span>
-                    </div>
-                </div>
-
+                ))}
             </div>
             <div style={{ marginBottom: 32 }}>
                 <Image src={'/images/bannerads.png'} priority alt='' width={272} height={281} />

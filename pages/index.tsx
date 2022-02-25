@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, useRef } from 'react';
 import type { NextPage } from 'next'
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@emotion/react';
@@ -6,6 +6,11 @@ import { useThemeContext } from '../components/theme/ThemeContext';
 import Image from 'next/image';
 import Category from '../components/homePage/category';
 import { Button } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import * as UsersActions from '../redux/user/user_actions';
+import Config from '../config/index';
+import { useRouter } from 'next/router';
+import InlineSVG from "react-inlinesvg";
 
 const useStyle = makeStyles((theme: any) => ({
   HomePage: {
@@ -48,6 +53,9 @@ const useStyle = makeStyles((theme: any) => ({
         },
         '& label': {
           color: theme.palette.common.Neutral.White,
+          [theme.breakpoints.down("md")]: {
+            fontSize: 18
+          },
         },
         '& span': {
           color: theme.palette.common.Neutral.White,
@@ -62,7 +70,24 @@ const useStyle = makeStyles((theme: any) => ({
           }
         }
       },
-
+      [theme.breakpoints.up("lg")]: {
+        minHeight: 360
+      },
+      [theme.breakpoints.down("lg")]: {
+        minHeight: 320
+      },
+      [theme.breakpoints.down("md")]: {
+        '& .cate': {
+          margin: '10px 16px !important',
+          padding: '0 !important',
+          '& div': {
+            padding: '5px !important',
+          }
+        },
+        '& button': {
+          height: 40
+        },
+      },
       [theme.breakpoints.between("sm", "md")]: {
         width: 'calc(100% / 2 - 11px)',
         '&:nth-child(2n+1)': {
@@ -80,39 +105,109 @@ const useStyle = makeStyles((theme: any) => ({
     }
   }
 }))
-const Home: NextPage = (props) => {
+const Home: NextPage = (props: any) => {
   const { themeMode, toggleTheme } = useThemeContext()
   const theme = useTheme();
   const classes = useStyle();
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [users, setUsers] = useState([]);
+  const hasNextPage = useRef(false);
+  const filter = useRef({ limit: 9, page: 1, areasOfConcern: '' })
+  const [loading, setLoading] = useState(false);
+  const loadMore = useRef(false);
 
   const onClick = () => {
     toggleTheme()
+  }
+
+  useEffect(() => {
+    getUsers();
+    document.addEventListener('scroll', onScroll);
+    return () => {
+      document.removeEventListener('scroll', onScroll);
+    }
+    /* eslint-disable */
+  }, [])
+
+  useEffect(() => {
+    document.addEventListener('scroll', onScroll);
+    return () => {
+      document.removeEventListener('scroll', onScroll);
+    }
+    /* eslint-disable */
+  }, [users])
+
+  const getUsers = () => {
+    dispatch(UsersActions.onFindUsers(filter.current, (error: any, data: any) => {
+      if (error) {
+        setLoading(false);
+        loadMore.current = false;
+        return;
+      }
+      hasNextPage.current = data.hasNextPage;
+      loadMore.current = false;
+      setLoading(false);
+      console.log(data.hasNextPage)
+      const _users = users.concat(data.docs);
+      setUsers(_users);
+    }))
+  }
+
+  const onReading = (id: any) => {
+    router.push('/posts/' + id);
+  }
+
+  const onFilterAreasOfConcern = (id: any) => {
+    setLoading(true);
+    filter.current.areasOfConcern = id;
+    getUsers();
+  }
+
+  const onScroll = (e: any) => {
+    if (document.scrollingElement?.scrollHeight !== undefined) {
+      const loadmore = window.innerHeight + document.documentElement.scrollTop >= (document.scrollingElement?.scrollHeight - (document.scrollingElement?.scrollHeight / 4));
+      if (loadmore && !loadMore.current && hasNextPage.current) {
+        loadMore.current = true;
+        filter.current.page = filter.current.page + 1;
+        getUsers();
+      }
+    }
   }
 
 
   return (
     <div className={classes.HomePage} >
       <div className={classes.title}>Lĩnh vực</div>
-      <Category />
-      <div className={`${classes.cardKols} cardKols`}>
-        {[0, 1, 2, 3].map(rs => (
-          <div className='card' key={rs}>
+      <Category onFilterAreasOfConcern={onFilterAreasOfConcern} />
+      {loading &&
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      }
+      <div className={`${classes.cardKols} cardKols`} >
+        {users.map((user: any, i: number) => (
+          <div className='card' key={i} >
             <div className='avatar'>
-              <Image src={'/images/image.png'} objectFit='cover' alt='' width={288} height={360} />
+              <Image src={Config.getImage(user?.profile?.imgPortrait) ?? '/images/user_default.png'} objectFit='cover' alt='' width={288} height={360} />
             </div>
             <div className='profile column'>
               <div className='profile-main'>
-                <label>Triệu Mẫn Di</label>
-                <span className="center-row pdb5"><Image src={'/icons/Location.svg'} priority alt='' width={20} height={20} />&nbsp;Hồ Chí Minh</span>
-                <span className="center-row"><Image src={'/icons/Money.svg'} priority alt='' width={20} height={20} />&nbsp;10.000.000đ</span>
+                <label>{user?.profile?.fullName}</label>
+                <span className="center-row pdb5"><InlineSVG src={'/icons/Location.svg'} width={20} height={20} />&nbsp;{user?.profile?.province}</span>
+                <span className="center-row"><InlineSVG src={'/icons/Money.svg'} width={20} height={20} />&nbsp;{Config.numberFormat(user?.rank?.price ?? 0)} đ</span>
                 <div className='profile-detail'>
                   <div className='cate'>
-                    <div>Mẫu ảnh</div>
-                    <div>PG sự kiện</div>
-                    <div>+2</div>
+                    {user?.areasOfConcerns.map((item: any, idx: number) => (
+                      idx <= 1 ?
+                        <div key={idx} >{item.name}</div>
+                        : idx === 2 ?
+                          <div key={idx} >+{user?.areasOfConcerns.length - 2}</div>
+                          : null
+                    ))}
                   </div>
                   <span className='description'>Hiện là một trong những người có tầm ảnh hưởng trên cộng đồng mạng đang được các NETIZEN đặc biệt quan  tâm bởi sở hữu vẻ ngoài xinh đẹp tài năng...</span>
-                  <div style={{ padding: '10px 16px' }}><Button variant="outlined" className='btn-custom-kol' >Đọc tiếp</Button></div>
+                  <div style={{ padding: '10px 16px' }}><Button variant="outlined" className='btn-custom-kol' onClick={() => onReading(user._id)} >Đọc tiếp</Button></div>
                 </div>
               </div>
             </div>

@@ -51,7 +51,25 @@ class Config {
     }
 
     static getImage(url: string) {
-        return url ? this.env.api + url : null;
+        return url ? this.env.url + '/' + url : null;
+    }
+
+    static numberFormat = (number: number, limitNumber = 0) => {
+        const formatter = new Intl.NumberFormat("en-US", {
+            minimumFractionDigits: limitNumber,
+            maximumFractionDigits: limitNumber,
+        });
+        const _number = formatter.format(number);
+        return !_number || _number === "NaN" ? 0 : _number;
+    };
+
+    static countDecimals = (value: number) => {
+        if (Math.floor(value) === value) return 0;
+        return value.toString().split(".")[1].length || 0;
+    }
+
+    static formatPrice(number: number, decimal: number = 0) {
+        return Config.numberFormat(number, decimal ?? Config.countDecimals(number));
     }
 
     static encryptData = (data: any) => {

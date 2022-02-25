@@ -222,7 +222,14 @@ a {
 }
 .main-page {
     max-width: 896px;
+    margin-bottom: 80px;
 }
 .mgb32 {
     margin-bottom: 32px !important;
+}
+
+.MuiPopover-root {
+    .MuiPaper-root {
+        margin-top: 10px;
+    }
 }

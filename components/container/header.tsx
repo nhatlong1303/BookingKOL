@@ -79,6 +79,10 @@ const useStyle = makeStyles((theme: any) => ({
         },
     },
     drawer: {
+        '& .menu .actived': {
+            fontWeight: 500,
+            color: theme.palette.common.Ink.Dark,
+        },
         [theme.breakpoints.up("md")]: {
             display: 'none',
         },
@@ -95,6 +99,9 @@ const useStyle = makeStyles((theme: any) => ({
                 color: theme.palette.common.Neutral.White,
                 margin: 10
             },
+        },
+        '& .column': {
+            marginBottom: 20
         }
     },
     download: {
@@ -102,7 +109,9 @@ const useStyle = makeStyles((theme: any) => ({
     },
     profile: {
         minWidth: 200,
-        padding: 20
+        padding: 10,
+        display: 'flex',
+        justifyContent: 'center'
     }
 }))
 
@@ -150,7 +159,7 @@ const Header = (props: Props) => {
     return (
         <div className={`header ${classes.header}`}>
             <div className="center-row">
-                <div className='logo-app'>
+                <div className='logo-app' onClick={() => router.push('/')}>
                     <Image src={'/logo.png'} priority alt='' width={250} height={80} />
                 </div>
                 <TextField
@@ -182,15 +191,15 @@ const Header = (props: Props) => {
             >
                 <div>
                     <div style={{ boxShadow: '0px 4px 8px rgba(158, 158, 158, 0.08)' }}>
-                        <div className='logo-app' style={{ display: 'flex' }}>
+                        <div className='logo-app' style={{ display: 'flex' }} onClick={() => router.push('/')}>
                             <Image src={'/logo.png'} priority alt='' width={200} height={60} />
                         </div>
                     </div>
                     <ul className='menu menu-mobile'>
-                        <li className='actived'>Trang chủ</li>
-                        <li>Thống kê</li>
-                        <li>Tin tức</li>
-                        <li>Liên hệ</li>
+                        <li className={tab === '/' ? 'actived' : ''} onClick={() => onChangeTab('')} >Trang chủ</li>
+                        <li className={tab === 'statistical' ? 'actived' : ''} onClick={() => onChangeTab('statistical')}>Thống kê</li>
+                        <li className={tab === 'posts' ? 'actived' : ''} onClick={() => onChangeTab('posts')}>Tin tức</li>
+                        <li className={tab === 'contact' ? 'actived' : ''} onClick={() => onChangeTab('contact')}>Liên hệ</li>
                     </ul>
                 </div>
                 <div className='column'>
@@ -198,9 +207,22 @@ const Header = (props: Props) => {
                         startIcon={<Image src={'/icons/Download.svg'} priority alt='' width={24} height={24} />}>
                         Tải ứng dụng
                     </Button>
-                    <Button variant="outlined" className='btn-custom-kol btn-login' onClick={onShowModalAuth}>
-                        Đăng nhập
-                    </Button>
+                    {!profile ?
+                        <Button variant="outlined" className='btn-custom-kol btn-login' onClick={onShowModalAuth}>
+                            Đăng nhập
+                        </Button>
+                        : <div className="center-row" style={{ justifyContent: 'space-between', padding: '0 10px' }}>
+                            <div className="center-row">
+                                <div className='avatar'>
+                                    <Image src={Config.getImage(profile?.profile?.imgPortrait) ?? '/images/avatar_default.svg'} priority alt='' width={48} height={48} onClick={onOpenProfile} />
+                                </div>
+                                <label style={{ fontWeight: 500, paddingLeft: 20 }}>{profile?.profile?.fullName}</label>
+                            </div>
+                            <Button variant="outlined" className='btn-custom-kol' onClick={_onLogout}>
+                                Đăng xuất
+                            </Button>
+                        </div>
+                    }
                 </div>
             </Drawer>
             <IconButton size='small' onClick={onToggle} className="btn-toggle" style={{ marginLeft: 10 }}>
@@ -217,7 +239,7 @@ const Header = (props: Props) => {
                         Đăng nhập
                     </Button>
                     :
-                    <div className='avatar'>
+                    <div className='avatar mgl10'>
                         <Image src={Config.getImage(profile?.profile?.imgPortrait) ?? '/images/avatar_default.svg'} priority alt='' width={48} height={48} onClick={onOpenProfile} />
                     </div>
                 }

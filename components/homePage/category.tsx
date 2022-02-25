@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, useRef } from 'react';
 import Image from 'next/image';
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import { makeStyles } from '@mui/styles';
@@ -10,7 +10,7 @@ const useStyle = makeStyles((theme: any) => ({
         marginBottom: 32,
         display: 'flex',
         '& .react-horizontal-scrolling-menu--item': {
-            '&:first-of-type .cate': {
+            '& .actived': {
                 backgroundColor: theme.palette.common.Brand.Orange,
                 color: theme.palette.common.Neutral.White,
                 marginLeft: '0 !important',
@@ -41,20 +41,23 @@ const useStyle = makeStyles((theme: any) => ({
     }
 }))
 
-const Category = () => {
+interface Props {
+    onFilterAreasOfConcern: (id: any) => void
+}
+const Category = (props: Props) => {
+    const { onFilterAreasOfConcern } = props;
     const classes = useStyle();
     const areasOfConcern = useSelector((state: any) => state?.setting?.areasOfConcern);
+    const [actived, setActived] = useState('');
 
     useEffect(() => {
-        const wraper = document.querySelector<HTMLElement>('.categories');
-        if (wraper) {
-            wraper.style.maxWidth = document.querySelector<HTMLElement>('.slider')?.clientWidth + 'px' ?? '100%'
-        }
+        onRisze();
         window.addEventListener('resize', onRisze);
         return () => {
             window.removeEventListener('resize', onRisze);
         }
     }, [])
+
 
     const onRisze = () => {
         const wraper = document.querySelector<HTMLElement>('.categories');
@@ -64,6 +67,13 @@ const Category = () => {
             wraper.style.maxWidth = (widthMain - widthRight - 80) + 'px' ?? '100%';
         }
     }
+
+    const onSelected = (id: any) => {
+        if (id === actived) return;
+        setActived(id);
+        onFilterAreasOfConcern(id);
+    }
+
     return (
         <div className="categories">
             <ScrollMenu
@@ -72,20 +82,20 @@ const Category = () => {
                 wrapperClassName={classes.category}
                 onWheel={onWheel}
             >
-                <Card title='Tất cả' itemId='all' />
+                <Card title='Tất cả' actived={actived === ''} itemId='all' id="" onClick={onSelected} />
                 {areasOfConcern.map((rs: any, i: number) => (
-                    <Card key={i} title={rs.name} itemId={String(i)} />
+                    <Card key={i} title={rs.name} id={rs._id} itemId={String(i)} actived={actived === rs._id} onClick={onSelected} />
                 ))}
             </ScrollMenu>
         </div>
     );
 };
 
-const Card = ({ title, itemId }: { title: string; itemId: string }) => {
+const Card = ({ title, itemId, onClick, actived, id }: { title: string; itemId: string, onClick: (e: any) => void, actived: boolean, id: any }) => {
     const visibility = useContext(VisibilityContext);
     const visible = visibility.isItemVisible(itemId);
     return (
-        <div className='cate'>{title}</div>
+        <div className={`cate ${actived ? 'actived' : ''}`} onClick={() => onClick(id)}>{title}</div>
     )
 }
 
