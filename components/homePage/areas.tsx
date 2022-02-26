@@ -13,8 +13,10 @@ const useStyle = makeStyles((theme: any) => ({
             '& .actived': {
                 backgroundColor: theme.palette.common.Brand.Orange,
                 color: theme.palette.common.Neutral.White,
-                marginLeft: '0 !important',
-                border: 'none !important'
+                border: '1px solid transparent !important'
+            },
+            '&:first-of-type .cate': {
+                marginLeft: '0 !important'
             },
             '&:last-of-type .cate': {
                 marginRight: '0 !important'
@@ -44,7 +46,7 @@ const useStyle = makeStyles((theme: any) => ({
 interface Props {
     onFilterAreasOfConcern: (id: any) => void
 }
-const Category = (props: Props) => {
+const Areas = (props: Props) => {
     const { onFilterAreasOfConcern } = props;
     const classes = useStyle();
     const areasOfConcern = useSelector((state: any) => state?.setting?.areasOfConcern);
@@ -60,7 +62,7 @@ const Category = (props: Props) => {
 
 
     const onRisze = () => {
-        const wraper = document.querySelector<HTMLElement>('.categories');
+        const wraper = document.querySelector<HTMLElement>('.areas');
         const widthRight = document.querySelector<HTMLElement>('.main-right')?.clientWidth;
         const widthMain = document.querySelector<HTMLElement>('.main')?.clientWidth;
         if (wraper && widthMain && widthRight) {
@@ -75,7 +77,7 @@ const Category = (props: Props) => {
     }
 
     return (
-        <div className="categories">
+        <div className="areas">
             <ScrollMenu
                 LeftArrow={LeftArrow}
                 RightArrow={RightArrow}
@@ -144,4 +146,4 @@ function onWheel(apiObj: scrollVisibilityApiType, ev: React.WheelEvent): void {
     }
 }
 
-export default Category;
+export default Areas;

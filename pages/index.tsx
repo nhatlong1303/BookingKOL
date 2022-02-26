@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 import { useTheme } from '@emotion/react';
 import { useThemeContext } from '../components/theme/ThemeContext';
 import Image from 'next/image';
-import Category from '../components/homePage/category';
+import Areas from '../components/homePage/areas';
 import { Button } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import * as UsersActions from '../redux/user/user_actions';
@@ -122,7 +122,7 @@ const Home: NextPage = (props: any) => {
   }
 
   useEffect(() => {
-    getUsers();
+    getUsers(true);
     document.addEventListener('scroll', onScroll);
     return () => {
       document.removeEventListener('scroll', onScroll);
@@ -138,7 +138,7 @@ const Home: NextPage = (props: any) => {
     /* eslint-disable */
   }, [users])
 
-  const getUsers = () => {
+  const getUsers = (isReset: boolean) => {
     dispatch(UsersActions.onFindUsers(filter.current, (error: any, data: any) => {
       if (error) {
         setLoading(false);
@@ -148,8 +148,7 @@ const Home: NextPage = (props: any) => {
       hasNextPage.current = data.hasNextPage;
       loadMore.current = false;
       setLoading(false);
-      console.log(data.hasNextPage)
-      const _users = users.concat(data.docs);
+      const _users = isReset ? data.docs : users.concat(data.docs);
       setUsers(_users);
     }))
   }
@@ -161,7 +160,7 @@ const Home: NextPage = (props: any) => {
   const onFilterAreasOfConcern = (id: any) => {
     setLoading(true);
     filter.current.areasOfConcern = id;
-    getUsers();
+    getUsers(true);
   }
 
   const onScroll = (e: any) => {
@@ -170,7 +169,7 @@ const Home: NextPage = (props: any) => {
       if (loadmore && !loadMore.current && hasNextPage.current) {
         loadMore.current = true;
         filter.current.page = filter.current.page + 1;
-        getUsers();
+        getUsers(false);
       }
     }
   }
@@ -179,7 +178,7 @@ const Home: NextPage = (props: any) => {
   return (
     <div className={classes.HomePage} >
       <div className={classes.title}>Lĩnh vực</div>
-      <Category onFilterAreasOfConcern={onFilterAreasOfConcern} />
+      <Areas onFilterAreasOfConcern={onFilterAreasOfConcern} />
       {loading &&
         <div className="loader-container">
           <div className="loader"></div>
@@ -189,7 +188,8 @@ const Home: NextPage = (props: any) => {
         {users.map((user: any, i: number) => (
           <div className='card' key={i} >
             <div className='avatar'>
-              <Image src={Config.getImage(user?.profile?.imgPortrait) ?? '/images/user_default.png'} objectFit='cover' alt='' width={288} height={360} />
+              <Image src={Config.getImage(user?.profile?.imgPortrait) ?? '/images/user_default.png'} objectFit='cover' alt='' width={288} height={360}
+                blurDataURL={'/images/blur.png'} placeholder="blur" />
             </div>
             <div className='profile column'>
               <div className='profile-main'>

@@ -93,7 +93,7 @@ const MainRight = () => {
     }, [])
 
     const getUsers = () => {
-        dispatch(UsersActions.onFindUsers({ limit: 10, skip: 0 }, (error: any, data: any) => {
+        dispatch(UsersActions.onFindUsers({ limit: 10, page: 1 }, (error: any, data: any) => {
             if (error) {
                 console.log(error)
                 return;
@@ -124,7 +124,8 @@ const MainRight = () => {
                 {users.map((user: any, i: number) => (
                     <div className='item-kol' key={i} onClick={() => onReading(user?._id)}>
                         <div className='avatar'>
-                            <Image src={Config.getImage(user?.profile?.imgPortrait) ?? '/images/avatar.png'} priority alt='' width={49} height={49} />
+                            <Image src={Config.getImage(user?.profile?.imgPortrait) ?? '/images/avatar.png'} priority alt='' width={49} height={49}
+                                blurDataURL={'/images/blur.png'} placeholder="blur" />
                         </div>
                         <div className='info'>
                             <span className='username'>{user?.profile?.fullName}</span>

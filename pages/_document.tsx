@@ -1,12 +1,14 @@
 import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@mui/styles';
+import Config from '../config/index';
 export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="vi">
         <Head>
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+          <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js`} />
         </Head>
         <body>
           <Main />
