@@ -18,7 +18,8 @@ const useStyle = makeStyles((theme: any) => ({
             display: 'flex',
             justifyContent: 'space-between',
             '& .main-page': {
-                marginRight: 32
+                marginRight: 32,
+                width: '100%'
             },
             [theme.breakpoints.up("lg")]: {
                 paddingLeft: 120,
@@ -37,11 +38,10 @@ const useStyle = makeStyles((theme: any) => ({
                 position: 'relative',
             },
             '& .slider': {
-                width: '100%',
                 maxWidth: 896,
                 height: 239,
                 maxHeight: 239,
-                overflow: 'hidden'
+                border: '1px solid #cfcfcf'
             }
         },
         '& .form-hook': {
@@ -90,6 +90,12 @@ const Layout = (props: Props) => {
     const [tab, setTab] = useState('/');
     const [flag, setFlag] = useState(false);
 
+    // gtag.event({
+    //     action: 'submit_form',
+    //     category: 'Contact',
+    //     label: this.state.message,
+    //   })
+
     useEffect(() => {
         setMount(true);
         dispatch(SettingActions.getSetting());
@@ -117,6 +123,7 @@ const Layout = (props: Props) => {
         if (path === tab) return false;
         router.push(`/${path}`);
     }
+
     const forgotPassword = router.pathname === '/forgotPassword';
     if (loading) return null;
 

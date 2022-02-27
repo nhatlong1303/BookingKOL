@@ -7,17 +7,17 @@ export enum AdType {
 }
 const adUnitProps: Record<AdType, any> = {
     [AdType.DEFAULT]: {
-        'data-ad-slot': '7181773959',
+        'data-ad-slot': '3661266124807971',
         'data-ad-format': 'auto',
         'data-full-width-responsive': 'true',
     },
     [AdType.ARTICLE]: {
-        'data-ad-slot': '3197857275',
+        'data-ad-slot': '3661266124807971',
         'data-ad-format': 'fluid',
         'data-ad-layout': 'in-article',
     },
     [AdType.VERTICAL]: {
-        'data-ad-slot': '8863578035',
+        'data-ad-slot': '3661266124807971',
         'data-ad-format': 'auto',
         'data-full-width-responsive': 'true',
     },
@@ -25,10 +25,11 @@ const adUnitProps: Record<AdType, any> = {
 
 interface GoogleAdProps {
     variant?: AdType;
+    className?: any
 }
 
 
-const GoogleAd = ({ variant = AdType.DEFAULT }: GoogleAdProps) => {
+const GoogleAd = ({ variant = AdType.DEFAULT, className }: GoogleAdProps) => {
 
     useEffect(() => {
         try {
@@ -38,11 +39,11 @@ const GoogleAd = ({ variant = AdType.DEFAULT }: GoogleAdProps) => {
             console.error(err);
         }
     }, []);
-
+    if (Config.env.development === 'YES') return null;
     return (
         <ins
-            className="adsbygoogle"
-            style={{ display: 'block' }}
+            className={`adsbygoogle ${className}`}
+            style={{ display: 'block', textAlign: 'center', width: '100%' }}
             data-ad-client={Config.env.adsense}
             {...adUnitProps[variant]}
         />

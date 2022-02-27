@@ -76,7 +76,7 @@
 .btn-custom-kol {
     height: 48px;
     border-radius: 24px !important;
-    padding: 0 30px !important;
+    padding: 0 20px !important;
     border: 1px solid $main !important;
     text-transform: unset !important;
 }
@@ -96,12 +96,14 @@
         box-shadow: 0px 2px 16px rgba(158, 158, 158, 0.16);
         border-radius: 16px;
         margin-bottom: 32px;
+        // width: max-content;
         .item-kol {
             display: flex;
             align-items: center;
             line-height: 20px;
             margin: 8px 0;
             padding-left: 16px;
+            padding-right: 16px;
             cursor: pointer;
             &:first-of-type {
                 margin-top: 0;
@@ -157,10 +159,42 @@
     transform: rotate(180deg);
     cursor: pointer;
     display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    &::after {
+        background: linear-gradient(270deg, #ffffff 53.96%, rgba(255, 255, 255, 0) 104.65%);
+        height: 100%;
+        width: 30px;
+        content: "";
+        pointer-events: none;
+        opacity: 0.8;
+        right: 20px;
+        position: absolute;
+    }
+}
+.unvisible {
+    &::before,
+    &::after {
+        opacity: 0 !important;
+    }
 }
 .nav-next {
+    &::before {
+        background: linear-gradient(270deg, #ffffff 53.96%, rgba(255, 255, 255, 0) 104.65%);
+        height: 100%;
+        width: 30px;
+        content: "";
+        pointer-events: none;
+        opacity: 0.8;
+        right: 20px;
+        position: absolute;
+    }
+    position: relative;
     cursor: pointer;
     display: flex;
+    align-items: center;
+    z-index: 1;
 }
 
 .react-horizontal-scrolling-menu--wrapper {

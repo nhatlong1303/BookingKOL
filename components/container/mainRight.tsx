@@ -26,6 +26,9 @@ const useStyle = makeStyles((theme: any) => ({
             '& .info': {
                 display: 'none !important'
             },
+            '& .avatar': {
+                margin: '0 !important'
+            },
         },
     },
     copyRight: {
@@ -35,7 +38,7 @@ const useStyle = makeStyles((theme: any) => ({
     },
     adsRight: {
         [theme.breakpoints.up("sm")]: {
-            minWidth: 220,
+            minWidth: 250,
             minHeight: 250
         },
         [theme.breakpoints.down("sm")]: {

@@ -15,6 +15,7 @@ import InlineSVG from "react-inlinesvg";
 const useStyle = makeStyles((theme: any) => ({
   HomePage: {
     position: 'relative',
+    marginTop: 10
   },
   title: {
     color: theme.palette.common.Ink.Dark,
@@ -160,6 +161,7 @@ const Home: NextPage = (props: any) => {
   const onFilterAreasOfConcern = (id: any) => {
     setLoading(true);
     filter.current.areasOfConcern = id;
+    filter.current.page = 1;
     getUsers(true);
   }
 

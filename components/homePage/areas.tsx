@@ -1,8 +1,11 @@
-import React, { useEffect, useContext, useState, useRef } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import Image from 'next/image';
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import { makeStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
+import InlineSVG from "react-inlinesvg";
+import { useRef } from 'react';
+
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 const useStyle = makeStyles((theme: any) => ({
@@ -51,6 +54,7 @@ const Areas = (props: Props) => {
     const classes = useStyle();
     const areasOfConcern = useSelector((state: any) => state?.setting?.areasOfConcern);
     const [actived, setActived] = useState('');
+    const itemId = useRef('');
 
     useEffect(() => {
         onRisze();
@@ -63,24 +67,29 @@ const Areas = (props: Props) => {
 
     const onRisze = () => {
         const wraper = document.querySelector<HTMLElement>('.areas');
+        const slide = document.querySelector<HTMLElement>('.slider');
         const widthRight = document.querySelector<HTMLElement>('.main-right')?.clientWidth;
         const widthMain = document.querySelector<HTMLElement>('.main')?.clientWidth;
         if (wraper && widthMain && widthRight) {
             wraper.style.maxWidth = (widthMain - widthRight - 80) + 'px' ?? '100%';
         }
+        if (slide && widthMain && widthRight) {
+            slide.style.width = (widthMain - widthRight - 80) + 'px' ?? '100%';
+        }
     }
 
-    const onSelected = (id: any) => {
+    const onSelected = (id: any, _itemId: string) => {
         if (id === actived) return;
         setActived(id);
+        itemId.current = _itemId;
         onFilterAreasOfConcern(id);
     }
 
     return (
         <div className="areas">
             <ScrollMenu
-                LeftArrow={LeftArrow}
-                RightArrow={RightArrow}
+                LeftArrow={() => LeftArrow(itemId.current)}
+                RightArrow={() => RightArrow(itemId.current)}
                 wrapperClassName={classes.category}
                 onWheel={onWheel}
             >
@@ -93,30 +102,30 @@ const Areas = (props: Props) => {
     );
 };
 
-const Card = ({ title, itemId, onClick, actived, id }: { title: string; itemId: string, onClick: (e: any) => void, actived: boolean, id: any }) => {
+const Card = ({ title, itemId, onClick, actived, id }: { title: string; itemId: string, onClick: (id: string, itemId: string) => void, actived: boolean, id: any }) => {
     const visibility = useContext(VisibilityContext);
     const visible = visibility.isItemVisible(itemId);
     return (
-        <div className={`cate ${actived ? 'actived' : ''}`} onClick={() => onClick(id)}>{title}</div>
+        <div className={`cate ${actived ? 'actived' : ''}`} onClick={() => onClick(id, itemId)}>{title}</div>
     )
 }
 
-const LeftArrow = () => {
-    const { isFirstItemVisible, scrollPrev, visibleItemsWithoutSeparators, initComplete } = useContext(VisibilityContext);
+const LeftArrow = (itemId: string) => {
+    const { isFirstItemVisible, scrollPrev, visibleItemsWithoutSeparators, initComplete,getItemById } = useContext(VisibilityContext);
     const [disabled, setDisabled] = useState(!initComplete || (initComplete && isFirstItemVisible));
     useEffect(() => {
         if (visibleItemsWithoutSeparators.length) {
             setDisabled(isFirstItemVisible);
         }
     }, [isFirstItemVisible, visibleItemsWithoutSeparators]);
-
+    const _visible = getItemById(itemId)?.visible;
     return (
-        !disabled && <div className="nav-pre" onClick={() => scrollPrev()} > <Image src={'/icons/ArrowRight.svg'} priority alt='' width={24} height={24} /></div>
+        !disabled && <div className={`nav-pre ${!_visible ? 'unvisible' : ''}`} onClick={() => scrollPrev()} > <InlineSVG src={'/icons/ArrowRight.svg'} /></div>
     )
 }
 
-const RightArrow = () => {
-    const { isLastItemVisible, scrollNext, visibleItemsWithoutSeparators, } = useContext(VisibilityContext);
+const RightArrow = (itemId: string) => {
+    const { isLastItemVisible, scrollNext, visibleItemsWithoutSeparators, getItemById } = useContext(VisibilityContext);
     const [disabled, setDisabled] = useState(!visibleItemsWithoutSeparators.length && isLastItemVisible);
 
     useEffect(() => {
@@ -124,9 +133,9 @@ const RightArrow = () => {
             setDisabled(isLastItemVisible);
         }
     }, [isLastItemVisible, visibleItemsWithoutSeparators]);
-
+    const _visible = getItemById(itemId)?.visible;
     return (
-        !disabled && <div onClick={() => scrollNext()} className="nav-next" ><Image src={'/icons/ArrowRight.svg'} priority alt='' width={24} height={24} /></div>
+        !disabled && <div onClick={() => scrollNext()} className={`nav-next ${!_visible ? 'unvisible' : ''}`}><InlineSVG src={'/icons/ArrowRight.svg'} /></div>
     )
 }
 
