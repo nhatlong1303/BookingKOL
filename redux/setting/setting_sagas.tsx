@@ -10,7 +10,8 @@ export default function SettingSagas() {
         watchOnVerify(),
         watchOnLogin(),
         watchOnLogout(),
-        watchOnUpload()
+        watchOnUpload(),
+        watchOnUpdateProfile()
     ];
 }
 
@@ -36,30 +37,16 @@ export function* getSetting(data: any) {
                 const _getProfile = Config.decryptData(localStorage.getItem('PROFILE'));
                 if (_getProfile) {
                     const profile = JSON.parse(_getProfile);
-                    Config.profile = profile;
                     yield put({
                         type: types.LOGIN_SUCCESS,
                         data: profile,
                     });
                 }
-                yield put({
-                    type: types.LOADING_SUCCESS,
-                    data: false,
-                });
             } else {
                 localStorage.removeItem('TOKEN');
                 localStorage.removeItem('PROFILE');
-                yield put({
-                    type: types.LOADING_SUCCESS,
-                    data: false,
-                });
             }
 
-        } else {
-            yield put({
-                type: types.LOADING_SUCCESS,
-                data: false,
-            });
         }
         // @ts-ignore
         const areasOfConcern = yield Api.get('/areas-of-concern/list');
@@ -77,6 +64,11 @@ export function* getSetting(data: any) {
     }
     catch (e) {
         console.log('getSetting is error');
+    } finally {
+        yield put({
+            type: types.LOADING_SUCCESS,
+            data: false,
+        });
     }
 }
 export function* watchGetSetting() {
@@ -179,7 +171,6 @@ export function* onLogout(data: any) {
             token: null,
             expire: 0
         }
-        Config.profile = null;
         yield put({
             type: types.LOGOUT_SUCCESS,
             data: null,
@@ -199,7 +190,6 @@ export function* watchOnLogout() {
         yield cancel(watcher);
     }
 }
-
 
 export function* onUpload(data: any) {
     try {
@@ -221,6 +211,27 @@ export function* watchOnUpload() {
     while (true) {
         // @ts-ignore
         const watcher = yield takeLatest(types.UPLOAD_IMAGE, onUpload);
+        yield take(['NETWORK']);
+        yield cancel(watcher);
+    }
+}
+
+export function* onUpdateProfile(data: any) {
+    try {
+        yield put({
+            type: types.UPDATE_PROFILE_SUCCESS,
+            data: data.params
+        });
+    }
+    catch (e) {
+        console.log('onUpdateProfile is error');
+    }
+
+}
+export function* watchOnUpdateProfile() {
+    while (true) {
+        // @ts-ignore
+        const watcher = yield takeLatest(types.UPDATE_PROFILE, onUpdateProfile);
         yield take(['NETWORK']);
         yield cancel(watcher);
     }

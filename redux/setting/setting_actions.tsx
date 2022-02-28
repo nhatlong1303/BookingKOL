@@ -10,6 +10,8 @@ export const types = {
     LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
     LOADING_SUCCESS: 'LOADING_SUCCESS',
     UPLOAD_IMAGE: 'UPLOAD_IMAGE',
+    UPDATE_PROFILE: 'UPDATE_PROFILE',
+    UPDATE_PROFILE_SUCCESS: 'UPDATE_PROFILE_SUCCESS',
 };
 
 export function getSetting(params?: any, cb?: any) {
@@ -59,6 +61,15 @@ export function onUpload(params?: any, cb?: any) {
         cb
     }
 }
+
+export function onUpdateProfile(params?: any, cb?: any) {
+    return {
+        type: types.UPDATE_PROFILE,
+        params,
+        cb
+    }
+}
+
 
 
 

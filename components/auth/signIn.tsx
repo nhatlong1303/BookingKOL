@@ -88,13 +88,8 @@ const SignIn = (props: Props) => {
                 token: data.token,
                 expire: expire
             };
-            Config.profile = data.data;
-            const profile = Config.encryptData(JSON.stringify(data.data));
-            if (profile) {
-                localStorage.setItem("PROFILE", profile);
-                localStorage.setItem("TOKEN", JSON.stringify(Config.token));
-                onClose(true);
-            }
+            localStorage.setItem("TOKEN", JSON.stringify(Config.token));
+            onClose(true);
         }))
     }
 

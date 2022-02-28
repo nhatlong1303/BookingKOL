@@ -4,11 +4,12 @@ import Header from './header';
 import MainRight from './mainRight';
 import ButtonToTop from './buttonToTop';
 import * as SettingActions from '../../redux/setting/setting_actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import UpdateInfo from '../homePage/updateInfo';
 import Config from '../../config/index';
 import { useRouter } from 'next/router';
 import AdSlide from './adSlide';
+
 
 const useStyle = makeStyles((theme: any) => ({
     root: {
@@ -80,10 +81,11 @@ const useStyle = makeStyles((theme: any) => ({
 interface Props {
     children: any
 }
+
 const Layout = (props: Props) => {
     const { children } = props;
     const router = useRouter();
-    const loading = useSelector((state: any) => state?.setting?.loading);
+    const [loading, profile] = useSelector((state: any) => [state?.setting?.loading, state?.setting?.profile]);
     const dispatch = useDispatch();
     const classes = useStyle();
     const [mount, setMount] = useState(false);
@@ -131,7 +133,7 @@ const Layout = (props: Props) => {
         <div id='layout' className={classes.root}>
             <Header login={login} onChangeTab={onChangeTab} tab={tab} onLogout={onLogout} />
             <div className='main'>
-                {Config.profile && !Config.profile?.profile?.fullName ?
+                {profile && !profile?.profile?.fullName ?
                     <UpdateInfo />
                     :
                     forgotPassword ? children : <>

@@ -1,4 +1,5 @@
 import { types } from "./setting_actions";
+import Config from '../../config/index';
 
 const initialState = {
     areasOfConcern: [],
@@ -21,6 +22,12 @@ export const setting = (state = initialState, action: Action) => {
             }
         case types.LOGIN_SUCCESS:
         case types.LOGOUT_SUCCESS:
+        case types.UPDATE_PROFILE_SUCCESS:
+            Config.profile = action.data;
+            if (action.data) {
+                const profile = Config.encryptData(JSON.stringify(action.data));
+                if (profile) localStorage.setItem("PROFILE", profile);
+            }
             return {
                 ...state,
                 profile: action.data

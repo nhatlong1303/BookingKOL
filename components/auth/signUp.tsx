@@ -133,13 +133,8 @@ const SignUp = (props: Props) => {
                 token: data.token,
                 expire: expire
             };
-            Config.profile = data.user;
-            const profile = Config.encryptData(JSON.stringify(data.user));
-            if (profile) {
-                localStorage.setItem("PROFILE", profile);
-                localStorage.setItem("TOKEN", JSON.stringify(Config.token));
-                onClose(true);
-            }
+            localStorage.setItem("TOKEN", JSON.stringify(Config.token));
+            onClose(true);
         }))
     }
 

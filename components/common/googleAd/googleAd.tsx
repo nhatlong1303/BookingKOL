@@ -39,11 +39,11 @@ const GoogleAd = ({ variant = AdType.DEFAULT, className }: GoogleAdProps) => {
             console.error(err);
         }
     }, []);
-    if (Config.env.development === 'YES') return null;
+    if (Config.env.development) return null;
     return (
         <ins
             className={`adsbygoogle ${className}`}
-            style={{ display: 'block', textAlign: 'center', width: '100%' }}
+            style={{ display: 'block', textAlign: 'center', width: '100%', overflow: 'hidden' }}
             data-ad-client={Config.env.adsense}
             {...adUnitProps[variant]}
         />

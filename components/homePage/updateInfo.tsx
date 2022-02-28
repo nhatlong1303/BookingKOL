@@ -163,18 +163,30 @@ const UpdateInfo = () => {
     const onSave = (e: any) => {
         const formData = new FormData();
         formData?.append('files', selectedImage.file);
-        dispatch(SettingActions.onUpload(formData, (error: any, data: any) => {
-            if (error) {
-                return;
-            }
-            const params = {
-                ...e,
-                imgPortrait: data[0]
-            }
-            dispatch(UserActions.onUpdateUser(params, (error: any, data: any) => {
-                console.log(data)
-            }))
-        }))
+        const _profile = { ...Config.profile };
+        _profile.profile.fullName = e.fullName;
+        _profile.profile.imgPortrait = selectedImage.url;
+        _profile.type = e.type;
+        dispatch(SettingActions.onUpdateProfile(_profile))
+        // const profile = Config.encryptData(JSON.stringify(Config.profile));
+        // if (profile) {
+        //     localStorage.setItem("PROFILE", profile);
+        // }
+        // dispatch(SettingActions.onUpload(formData, (error: any, data: any) => {
+        //     if (error) {
+        //         return;
+        //     }
+        //     const params = {
+        //         ...e,
+        //         imgPortrait: data[0]
+        //     }
+        //     dispatch(UserActions.onUpdateUser(params, (error: any, data: any) => {
+        //         if (error) {
+        //             return;
+        //         }
+        //         console.log(data)
+        //     }))
+        // }))
     }
 
     const onClickAvatar = () => {
@@ -205,7 +217,7 @@ const UpdateInfo = () => {
                     <div className='avatar_container'>
                         <div className='left'></div>
                         <div className='middle' onClick={onClickAvatar}>
-                            <div className='middle-main' style={{ backgroundImage: `url(${selectedImage.url})` }}
+                            <div className='middle-main' style={{ backgroundImage: `url(${selectedImage.url ?? ''})` }}
                             > {!selectedImage.url && <InlineSVG src={'/icons/Add.svg'} width={48} height={48} />}</div>
                         </div>
                         <div className='right'></div>
