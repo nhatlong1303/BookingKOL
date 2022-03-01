@@ -164,29 +164,22 @@ const UpdateInfo = () => {
         const formData = new FormData();
         formData?.append('files', selectedImage.file);
         const _profile = { ...Config.profile };
-        _profile.profile.fullName = e.fullName;
-        _profile.profile.imgPortrait = selectedImage.url;
-        _profile.type = e.type;
-        dispatch(SettingActions.onUpdateProfile(_profile))
-        // const profile = Config.encryptData(JSON.stringify(Config.profile));
-        // if (profile) {
-        //     localStorage.setItem("PROFILE", profile);
-        // }
-        // dispatch(SettingActions.onUpload(formData, (error: any, data: any) => {
-        //     if (error) {
-        //         return;
-        //     }
-        //     const params = {
-        //         ...e,
-        //         imgPortrait: data[0]
-        //     }
-        //     dispatch(UserActions.onUpdateUser(params, (error: any, data: any) => {
-        //         if (error) {
-        //             return;
-        //         }
-        //         console.log(data)
-        //     }))
-        // }))
+        dispatch(SettingActions.onUpload(formData, (error: any, data: any) => {
+            if (error) {
+                return;
+            }
+            const params = {
+                ...e,
+                imgPortrait: data[0]
+            }
+            dispatch(UserActions.onUpdateUser(params, (error: any, data: any) => {
+                if (error) { return; }
+                _profile.profile.fullName = e.fullName;
+                _profile.profile.imgPortrait = params.imgPortrait;
+                _profile.type = e.type;
+                dispatch(SettingActions.onUpdateProfile(_profile))
+            }))
+        }))
     }
 
     const onClickAvatar = () => {

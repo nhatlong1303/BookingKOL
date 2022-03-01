@@ -11,7 +11,7 @@ import * as UsersActions from '../redux/user/user_actions';
 import Config from '../config/index';
 import { useRouter } from 'next/router';
 import InlineSVG from "react-inlinesvg";
-// import ImageWithFallBack from '../components/common/imageWithFallBack/imageWithFallBack';
+import ImageWithFallBack from '../components/common/imageWithFallBack/imageWithFallBack';
 
 const useStyle = makeStyles((theme: any) => ({
   HomePage: {
@@ -41,14 +41,7 @@ const useStyle = makeStyles((theme: any) => ({
   cardKols: {
     '& .card': {
       height: 'auto',
-      width: 'calc(100% / 3 - 11px)',
       margin: '0 8px 16px 8px',
-      '&:nth-child(3n+1)': {
-        marginLeft: '0 !important',
-      },
-      '&:nth-child(3n+3)': {
-        marginRight: '0 !important',
-      },
       '& .profile': {
         '&::before': {
           background: theme.palette.common.Gradient.Aurora,
@@ -73,10 +66,19 @@ const useStyle = makeStyles((theme: any) => ({
         }
       },
       [theme.breakpoints.up("lg")]: {
-        minHeight: 360
+        minHeight: 360,
       },
       [theme.breakpoints.down("lg")]: {
         minHeight: 320
+      },
+      [theme.breakpoints.up("md")]: {
+        width: 'calc(100% / 3 - 11px)',
+        '&:nth-child(3n+1)': {
+          marginLeft: '0 !important',
+        },
+        '&:nth-child(3n+3)': {
+          marginRight: '0 !important',
+        },
       },
       [theme.breakpoints.down("md")]: {
         '& .cate': {
@@ -191,8 +193,12 @@ const Home: NextPage = (props: any) => {
         {users.map((user: any, i: number) => (
           <div className='card' key={i} >
             <div className='avatar'>
-              <Image src={Config.getImage(user?.profile?.imgPortrait) ?? '/images/user_default.png'} objectFit='cover' alt='' width={288} height={360}
-                blurDataURL={'/images/blur.png'} placeholder="blur" />
+              <ImageWithFallBack
+                src={Config.getImage(user?.profile?.imgPortrait)}
+                objectFit='cover' alt='' width={288} height={360}
+                blurDataURL={'/images/blur.png'} placeholder="blur"
+                fallBackSrc='/images/no_image.png'
+              />
             </div>
             <div className='profile column'>
               <div className='profile-main'>

@@ -9,7 +9,7 @@ import UpdateInfo from '../homePage/updateInfo';
 import Config from '../../config/index';
 import { useRouter } from 'next/router';
 import AdSlide from './adSlide';
-
+import { createSelector } from 'reselect';
 
 const useStyle = makeStyles((theme: any) => ({
     root: {
@@ -81,16 +81,34 @@ const useStyle = makeStyles((theme: any) => ({
 interface Props {
     children: any
 }
+//createSelector logic
+// const getProfile = createSelector(
+//     [
+//         state => state.setting,
+//         (state, params) => params
+//     ],
+//     (setting, params) => setting?.profile
+// );
+
+// const getLoading = createSelector(
+//     [
+//         state => state.setting,
+//         (state, params) => params
+//     ],
+//     (setting, params) => setting?.loading
+// );
 
 const Layout = (props: Props) => {
     const { children } = props;
     const router = useRouter();
-    const [loading, profile] = useSelector((state: any) => [state?.setting?.loading, state?.setting?.profile]);
+    const loading = useSelector((state: any) => state?.setting?.loading);
+    const profile = useSelector((state: any) => state?.setting?.profile);
+    // const profile = useSelector(getProfile);
+    // const loading = useSelector(getLoading);
     const dispatch = useDispatch();
     const classes = useStyle();
     const [mount, setMount] = useState(false);
     const [tab, setTab] = useState('/');
-    const [flag, setFlag] = useState(false);
 
     // gtag.event({
     //     action: 'submit_form',
@@ -111,14 +129,8 @@ const Layout = (props: Props) => {
         /* eslint-disable */
     }, [])
 
-    const login = () => {
-        setFlag(!flag);
-    }
-
     const onLogout = () => {
-        dispatch(SettingActions.onLogout(null, () => {
-            setFlag(!flag);
-        }));
+        dispatch(SettingActions.onLogout());
     }
 
     const onChangeTab = (path: string) => {
@@ -131,7 +143,7 @@ const Layout = (props: Props) => {
 
     return (
         <div id='layout' className={classes.root}>
-            <Header login={login} onChangeTab={onChangeTab} tab={tab} onLogout={onLogout} />
+            <Header onChangeTab={onChangeTab} tab={tab} onLogout={onLogout} profile={profile} />
             <div className='main'>
                 {profile && !profile?.profile?.fullName ?
                     <UpdateInfo />

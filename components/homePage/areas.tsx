@@ -54,7 +54,7 @@ const Areas = (props: Props) => {
     const classes = useStyle();
     const areasOfConcern = useSelector((state: any) => state?.setting?.areasOfConcern);
     const [actived, setActived] = useState('');
-    const itemId = useRef('');
+    const itemId = useRef('all');
 
     useEffect(() => {
         onRisze();

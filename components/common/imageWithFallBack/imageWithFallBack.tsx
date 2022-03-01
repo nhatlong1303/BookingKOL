@@ -1,23 +1,25 @@
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useRef } from 'react';
 import Image from "next/image";
 
 interface Props {
-    src?: any,
+    src: any,
     alt?: string,
-    width: any,
-    height: any,
+    width?: any,
+    height?: any,
     objectFit?: any,
     layout?: any,
     blurDataURL?: string,
-    placeholder: any
+    placeholder?: any,
+    fallBackSrc?: string
 }
 const ImageWithFallBack = (props: Props) => {
-    const { src, alt = '', width, height, objectFit = 'cover', layout = 'responsive', blurDataURL, placeholder = 'blur' } = props;
-    const [srcError, setSrcError] = useState<any>(null);
-    console.log(1)
+    const { src, alt = '', width, height, objectFit = 'cover', layout = 'responsive', blurDataURL, placeholder = 'blur',
+        fallBackSrc = '/images/no_image.png' } = props;
+    const [ImageSrc, setImageSrc] = useState<any>(src ?? fallBackSrc);
+    
     return (
         <Image
-            src={srcError ?? (src ?? '/images/no_image.png')}
+            src={ImageSrc}
             alt={alt}
             width={width}
             height={height}
@@ -26,7 +28,7 @@ const ImageWithFallBack = (props: Props) => {
             blurDataURL={blurDataURL}
             placeholder={placeholder}
             onError={(e) => {
-                if (e.type === 'error') setSrcError('/images/no_image.png')
+                if (e.type === 'error') setImageSrc(fallBackSrc)
             }}
         />
     );

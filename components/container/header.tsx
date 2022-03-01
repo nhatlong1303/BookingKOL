@@ -6,10 +6,7 @@ import { TextField, InputAdornment, IconButton, Button, Drawer } from '@mui/mate
 import Config from '../../config/index';
 import { Menu, Close } from '@mui/icons-material';
 import Auth from '../auth/auth';
-import { useSelector } from 'react-redux';
 import PopoverActions from '../common/popover/popoverActions';
-import { createSelector } from 'reselect';
-
 
 const useStyle = makeStyles((theme: any) => ({
     header: {
@@ -117,26 +114,15 @@ const useStyle = makeStyles((theme: any) => ({
 }))
 
 interface Props {
-    login: () => void,
     onChangeTab: (e: string) => void,
     tab: string,
-    onLogout: () => void
+    onLogout: () => void,
+    profile: any
 }
-
-
-
-const getProfile = createSelector(
-    [
-        state => state.setting,
-        (state, params) => params
-    ],
-    (setting, params) => setting?.profile?.profile
-);
 
 const Header = (props: Props) => {
     const classes = useStyle();
-    const { login, onChangeTab, tab, onLogout } = props;
-    const profile = useSelector((state: any) => getProfile(state));
+    const { onChangeTab, tab, onLogout, profile } = props;
     const profileRef = useRef<any>(null);
     const [open, setOpen] = useState(false);
     const [showModalAuth, setShowModalAuth] = useState(false);
@@ -154,7 +140,6 @@ const Header = (props: Props) => {
     }
 
     const onClose = (boolean = false) => {
-        if (boolean) login();
         onShowModalAuth();
     }
 
@@ -251,7 +236,7 @@ const Header = (props: Props) => {
                     </Button>
                     :
                     <div className='avatar mgl10'>
-                        <Image src={Config.getImage(profile?.imgPortrait) ?? '/images/avatar_default.svg'} priority alt='' width={48} height={48} onClick={onOpenProfile} />
+                        <Image src={Config.getImage(profile?.profile?.imgPortrait) ?? '/images/avatar_default.svg'} priority alt='' width={48} height={48} onClick={onOpenProfile} />
                     </div>
                 }
                 {showModalAuth && <Auth onClose={onClose} />}
