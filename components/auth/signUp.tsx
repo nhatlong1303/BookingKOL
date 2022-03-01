@@ -216,7 +216,7 @@ const SignUp = (props: Props) => {
                                     />
                                 </div>
                                 <Button disabled={loading} variant="outlined" className='btn-custom-kol btn-login' type='submit' onClick={handleSubmit(onVerify)}>
-                                    {loading ? <><div className="loader-icon"></div> Đang xác thực </> : 'Xác thực'}
+                                    {loading ? <><div className="loader" style={{ fontSize: 2, marginRight: 10 }}></div> Đang xác thực </> : 'Xác thực'}
                                 </Button>
                             </div>
                             :
@@ -256,7 +256,7 @@ const SignUp = (props: Props) => {
                                     {...register("ref")}
                                 />
                                 <Button disabled={loading} variant="outlined" className='btn-custom-kol btn-login' type='submit' onClick={handleSubmit(onRegister)}>
-                                    {loading ? <><div className="loader-icon"></div> Đang tạo</> : 'Tạo tài khoản'}
+                                    {loading ? <><div className="loader" style={{ fontSize: 2, marginRight: 10 }}></div> Đang tạo</> : 'Tạo tài khoản'}
                                 </Button>
                             </>
                         }

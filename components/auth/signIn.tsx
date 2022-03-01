@@ -140,7 +140,7 @@ const SignIn = (props: Props) => {
                             }}
                         />
                         <Button variant="outlined" className='btn-custom-kol btn-login' type='submit' onClick={handleSubmit(onLogin)}>
-                            {loading ? <><div className="loader-icon"></div> Đang đăng nhập </> : 'Đăng nhập'}
+                            {loading ? <><div className="loader" style={{ fontSize: 2, marginRight: 10 }}></div> Đang đăng nhập </> : 'Đăng nhập'}
                         </Button>
                     </form>
                 </div>

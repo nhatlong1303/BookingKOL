@@ -11,6 +11,7 @@ import * as UsersActions from '../redux/user/user_actions';
 import Config from '../config/index';
 import { useRouter } from 'next/router';
 import InlineSVG from "react-inlinesvg";
+// import ImageWithFallBack from '../components/common/imageWithFallBack/imageWithFallBack';
 
 const useStyle = makeStyles((theme: any) => ({
   HomePage: {
