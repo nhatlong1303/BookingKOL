@@ -15,7 +15,6 @@ class Config {
         token: null,
         expire: 0
     };
-    static getToken = {};
     static profile: any = null;
     static language: any = '84';
     static loading: any = null;
@@ -23,16 +22,7 @@ class Config {
     static popup: any = null;
     static env = env;
     static loadingProcess: any = null;
-    static theme: any = null;
     static screenMac = typeof window !== "undefined" && window.innerHeight <= 764;
-
-    static menu = [
-        { _id: 3, name: 'Sơn nước nội thất', slug: 'son-noi-that', parentId: 0 },
-        { _id: 7, name: 'Sơn nước nội thất A', slug: 'A', parentId: 3 },
-        { _id: 8, name: 'Sơn nước nội thất B', slug: 'B', parentId: 3 },
-        { _id: 9, name: 'Sơn nước nội thất C', slug: 'C', parentId: 8 },
-        { _id: 10, name: 'Sơn nước nội thất D', slug: 'D', parentId: 8 },
-    ]
 
     static srollToTop = () => {
         window.scroll({
@@ -131,21 +121,6 @@ class Config {
         return localize['vi'][text] ? localize['vi'][text] : text;
     };
 
-    static randomSRC(width: number, height: number) {
-        const widthImage = width ? width : 320;
-        const heightImage = height ? height : 320;
-        return "https://loremflickr.com/" + widthImage + "/" + heightImage;
-    };
-
-    static isJson(str: string) {
-        try {
-            JSON.parse(str);
-        } catch (e) {
-            return false;
-        }
-        return true;
-    }
-
     static timeBeforeNow = (timeStamp: string, format: any = 'YYYY-MM-DD hh:mm:ss') => {
         const lang = Config.language === '84' ? 'vi' : 'en';
         let start = moment();
@@ -161,54 +136,8 @@ class Config {
         return time > 1440 ? moment(timeStamp).format('DD/MM/YYYY') : moment(timeStamp).format(format);
     };
 
-    static getAverageRGB = (imgEl: any) => {
-        if (!imgEl) return;
-        var blockSize = 5, // only visit every 5 pixels
-            defaultRGB = { r: 0, g: 0, b: 0 }, // for non-supporting envs
-            canvas = document.createElement('canvas'),
-            context = canvas.getContext && canvas.getContext('2d'),
-            data, width, height,
-            i = -4,
-            length,
-            rgb = { r: 0, g: 0, b: 0 },
-            count = 0;
-
-        if (!context) {
-            return defaultRGB;
-        }
-
-        height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
-        width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
-
-        context.drawImage(imgEl, 0, 0);
-
-        try {
-            data = context.getImageData(0, 0, width, height);
-        } catch (e) {
-            /* security error, img on diff domain */
-            return defaultRGB;
-        }
-
-        length = data.data.length;
-
-        while ((i += blockSize * 4) < length) {
-            ++count;
-            rgb.r += data.data[i];
-            rgb.g += data.data[i + 1];
-            rgb.b += data.data[i + 2];
-        }
-
-        // ~~ used to floor values
-        rgb.r = ~~((rgb.r / count) + 9);
-        rgb.g = ~~((rgb.g / count) + 4);
-        rgb.b = ~~((rgb.b / count) + 5);
-
-        return 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
-
-    }
-
     static getRandomNumber = (min: number, max: number) => {
-        return Math.random() * (max - min) + min;
+        return Math.floor(Math.random() * (max - min) + min);
     }
 
     static isEmpty = (value: any, escapeZero = false) => {

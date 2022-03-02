@@ -128,5 +128,5 @@ const PopupAction = (props: Props) => {
         </React.Fragment>
     );
 }
-
+Popup.displayName = 'Popup';
 export default Popup;

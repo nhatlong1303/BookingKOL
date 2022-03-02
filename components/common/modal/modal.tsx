@@ -93,5 +93,5 @@ const Modal = React.memo((props: Props) => {
         </div>
     );
 })
-
+Modal.displayName = 'Modal';
 export default Modal;

@@ -1,4 +1,4 @@
-import React, { useState, memo, useRef } from 'react';
+import React, { useState, memo, useRef, useEffect } from 'react';
 import Image from "next/image";
 
 interface Props {
@@ -16,7 +16,12 @@ const ImageWithFallBack = (props: Props) => {
     const { src, alt = '', width, height, objectFit = 'cover', layout = 'responsive', blurDataURL, placeholder = 'blur',
         fallBackSrc = '/images/no_image.png' } = props;
     const [ImageSrc, setImageSrc] = useState<any>(src ?? fallBackSrc);
-    
+
+    useEffect(() => {
+        if (src !== ImageSrc) setImageSrc(src ?? fallBackSrc);
+        /* eslint-disable */
+    }, [src])
+
     return (
         <Image
             src={ImageSrc}

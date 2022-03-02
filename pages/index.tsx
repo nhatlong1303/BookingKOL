@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
-import type { NextPage } from 'next'
+import type { NextPage, GetStaticProps } from 'next'
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@emotion/react';
 import { useThemeContext } from '../components/theme/ThemeContext';
@@ -12,6 +12,8 @@ import Config from '../config/index';
 import { useRouter } from 'next/router';
 import InlineSVG from "react-inlinesvg";
 import ImageWithFallBack from '../components/common/imageWithFallBack/imageWithFallBack';
+import Api from '../services/api';
+// import GoogleAd from '../components/common/googleAd/googleAd';
 
 const useStyle = makeStyles((theme: any) => ({
   HomePage: {
@@ -110,29 +112,21 @@ const useStyle = makeStyles((theme: any) => ({
   }
 }))
 const Home: NextPage = (props: any) => {
-  const { themeMode, toggleTheme } = useThemeContext()
-  const theme = useTheme();
+  // const { themeMode, toggleTheme } = useThemeContext();
+  // const theme = useTheme();
+  const { kols } = props;
   const classes = useStyle();
   const router = useRouter();
   const dispatch = useDispatch();
-  const [users, setUsers] = useState([]);
-  const hasNextPage = useRef(false);
-  const filter = useRef({ limit: 9, page: 1, areasOfConcern: '' })
+  const [users, setUsers] = useState(kols?.docs ?? []);
+  const hasNextPage = useRef(kols?.hasNextPage ?? false);
+  const filter = useRef({ limit: 8, page: 1, areasOfConcern: '' })
   const [loading, setLoading] = useState(false);
   const loadMore = useRef(false);
 
-  const onClick = () => {
-    toggleTheme()
-  }
-
-  useEffect(() => {
-    getUsers(true);
-    document.addEventListener('scroll', onScroll);
-    return () => {
-      document.removeEventListener('scroll', onScroll);
-    }
-    /* eslint-disable */
-  }, [])
+  // const onClick = () => {
+  //   toggleTheme()
+  // }
 
   useEffect(() => {
     document.addEventListener('scroll', onScroll);
@@ -152,6 +146,8 @@ const Home: NextPage = (props: any) => {
       hasNextPage.current = data.hasNextPage;
       loadMore.current = false;
       setLoading(false);
+      const rand = Config.getRandomNumber(0, 10);
+      data.docs.splice(rand, 0, { ads: true, index: rand });
       const _users = isReset ? data.docs : users.concat(data.docs);
       setUsers(_users);
     }))
@@ -191,41 +187,68 @@ const Home: NextPage = (props: any) => {
       }
       <div className={`${classes.cardKols} cardKols`} >
         {users.map((user: any, i: number) => (
-          <div className='card' key={i} >
-            <div className='avatar'>
-              <ImageWithFallBack
-                src={Config.getImage(user?.profile?.imgPortrait)}
-                objectFit='cover' alt='' width={288} height={360}
-                blurDataURL={'/images/blur.png'} placeholder="blur"
-                fallBackSrc='/images/no_image.png'
-              />
+          user?.ads ?
+            <div className='card' key={i} >
+              <Image src={'/images/bannerads.png'} priority alt='' width={272} height={281} />
+              {/* <GoogleAd slot='2' format='fluid' layout='in-article' /> */}
             </div>
-            <div className='profile column'>
-              <div className='profile-main'>
-                <label>{user?.profile?.fullName}</label>
-                <span className="center-row pdb5"><InlineSVG src={'/icons/Location.svg'} width={20} height={20} />&nbsp;{user?.profile?.province}</span>
-                <span className="center-row"><InlineSVG src={'/icons/Money.svg'} width={20} height={20} />&nbsp;{Config.numberFormat(user?.rank?.price ?? 0)} đ</span>
-                <div className='profile-detail'>
-                  <div className='cate'>
-                    {user?.areasOfConcerns.map((item: any, idx: number) => (
-                      idx <= 1 ?
-                        <div key={idx} >{item.name}</div>
-                        : idx === 2 ?
-                          <div key={idx} >+{user?.areasOfConcerns.length - 2}</div>
-                          : null
-                    ))}
+            :
+            <div className='card' key={i} >
+              <div className='avatar'>
+                <ImageWithFallBack
+                  src={Config.getImage(user?.profile?.imgPortrait)}
+                  objectFit='cover'
+                  width={288}
+                  height={360}
+                  blurDataURL={'/images/blur.png'}
+                  placeholder="blur"
+                  fallBackSrc='/images/no_image.png'
+                  alt='Hiện là một trong những người có tầm ảnh hưởng trên cộng đồng mạng đang được các NETIZEN đặc biệt quan  tâm bởi sở hữu vẻ ngoài xinh đẹp tài năng...'
+                />
+              </div>
+              <div className='profile column'>
+                <div className='profile-main'>
+                  <label>{user?.profile?.fullName}</label>
+                  <span className="center-row pdb5"><InlineSVG src={'/icons/Location.svg'} width={20} height={20} />&nbsp;{user?.profile?.province}</span>
+                  <span className="center-row"><InlineSVG src={'/icons/Money.svg'} width={20} height={20} />&nbsp;{Config.numberFormat(user?.rank?.price ?? 0)} đ</span>
+                  <div className='profile-detail'>
+                    <div className='cate'>
+                      {user?.areasOfConcerns.map((item: any, idx: number) => (
+                        idx <= 1 ?
+                          <div key={idx} >{item.name}</div>
+                          : idx === 2 ?
+                            <div key={idx} >+{user?.areasOfConcerns.length - 2}</div>
+                            : null
+                      ))}
+                    </div>
+                    <span className='description'>Hiện là một trong những người có tầm ảnh hưởng trên cộng đồng mạng đang được các NETIZEN đặc biệt quan  tâm bởi sở hữu vẻ ngoài xinh đẹp tài năng...</span>
+                    <div style={{ padding: '10px 16px' }}><Button variant="outlined" className='btn-custom-kol' onClick={() => onReading(user._id)} >Đọc tiếp</Button></div>
                   </div>
-                  <span className='description'>Hiện là một trong những người có tầm ảnh hưởng trên cộng đồng mạng đang được các NETIZEN đặc biệt quan  tâm bởi sở hữu vẻ ngoài xinh đẹp tài năng...</span>
-                  <div style={{ padding: '10px 16px' }}><Button variant="outlined" className='btn-custom-kol' onClick={() => onReading(user._id)} >Đọc tiếp</Button></div>
                 </div>
               </div>
             </div>
-          </div>
         ))}
       </div>
-    </div >
+    </div>
   );
 };
 
+const getUsers = async () => {
+  const data = await Api.get('/user/find-kol-web', { limit: 8, page: 1, areasOfConcern: '' });
+  return data?.data ?? false;
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  const kols = await getUsers();
+  const rand = Config.getRandomNumber(0, 10);
+  if (kols?.docs) {
+    kols.docs.splice(rand, 0, { ads: true, index: rand });
+  }
+  const metaTags = { title: 'Booking Kol' };
+  return {
+    revalidate: 30, //timer refresh after updated data
+    props: { metaTags, kols: kols }
+  }
+}
 
 export default Home

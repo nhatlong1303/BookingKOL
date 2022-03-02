@@ -16,15 +16,13 @@ class Api extends React.Component {
         if (!isFormData) {
             headers['Content-Type'] = "application/x-www-form-urlencoded";
         }
-        if (Config.getToken) {
-            Config.getToken = false;
-        } else {
+        if (Config.token.token) {
             headers['api-token'] = Config.token.token;
         }
         return headers;
     }
 
-    static get(route: string, params: any) {
+    static get(route: string, params?: any) {
         const _router = Config.isEmpty(params) ? route : route + '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
         return this.xhr(_router, null, 'GET');
     }

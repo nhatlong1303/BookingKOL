@@ -1,35 +1,18 @@
 import React, { useEffect } from 'react';
 import Config from '../../../config/index';
-export enum AdType {
-    DEFAULT,
-    ARTICLE,
-    VERTICAL,
-}
-const adUnitProps: Record<AdType, any> = {
-    [AdType.DEFAULT]: {
-        'data-ad-slot': '3661266124807971',
-        'data-ad-format': 'auto',
-        'data-full-width-responsive': 'true',
-    },
-    [AdType.ARTICLE]: {
-        'data-ad-slot': '3661266124807971',
-        'data-ad-format': 'fluid',
-        'data-ad-layout': 'in-article',
-    },
-    [AdType.VERTICAL]: {
-        'data-ad-slot': '3661266124807971',
-        'data-ad-format': 'auto',
-        'data-full-width-responsive': 'true',
-    },
-};
-
+// 'data-ad-format': 'fluid',
+// 'data-ad-layout': 'in-article',
 interface GoogleAdProps {
-    variant?: AdType;
-    className?: any
+    className?: any,
+    slot: string
+    format?: 'auto' | 'fluid',
+    layout?: string | 'in-article',
+    responsive?: boolean
 }
 
 
-const GoogleAd = ({ variant = AdType.DEFAULT, className }: GoogleAdProps) => {
+const GoogleAd = (props: GoogleAdProps) => {
+    const { className, slot, format = 'auto', responsive = true, layout } = props;
 
     useEffect(() => {
         try {
@@ -45,7 +28,10 @@ const GoogleAd = ({ variant = AdType.DEFAULT, className }: GoogleAdProps) => {
             className={`adsbygoogle ${className}`}
             style={{ display: 'block', textAlign: 'center', width: '100%', overflow: 'hidden' }}
             data-ad-client={Config.env.adsense}
-            {...adUnitProps[variant]}
+            data-ad-slot={slot}
+            data-ad-layout={layout}
+            data-ad-format={format}
+            data-full-width-responsive={responsive}
         />
     );
 };

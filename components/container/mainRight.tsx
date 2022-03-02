@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import * as UsersActions from '../../redux/user/user_actions';
 import Config from '../../config/index';
 import { useRouter } from 'next/router';
+// import GoogleAd from '../common/googleAd/googleAd';
 
 const useStyle = makeStyles((theme: any) => ({
     title: {
@@ -137,7 +138,8 @@ const MainRight = () => {
                     </div>
                 ))}
             </div>
-            <div style={{ marginBottom: 32 }}>
+            <div style={{ marginBottom: 32, border: '1px solid #cfcfcf', }}>
+                {/* <GoogleAd slot='2' /> */}
                 <Image src={'/images/bannerads.png'} priority alt='' width={272} height={281} />
             </div>
             <div className={classes.copyRight}>2021 • Bản quyền thuộc về Booking KOL</div>
