@@ -1,7 +1,7 @@
 import React from 'react';
 import { GetStaticProps } from 'next';
 
-const statistical = () => {
+const Statistical = () => {
     return (
         <div>
             statistical
@@ -16,4 +16,4 @@ export const getStaticProps: GetStaticProps = async () => {
         props: { metaTags }
     }
 }
-export default statistical;
+export default Statistical;

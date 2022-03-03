@@ -171,6 +171,7 @@ export function* onLogout(data: any) {
             token: null,
             expire: 0
         }
+        // document.cookie = 'BOOKING_ACCESS_TOKEN=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
         yield put({
             type: types.LOGOUT_SUCCESS,
             data: null,

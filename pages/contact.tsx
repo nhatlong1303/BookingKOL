@@ -1,6 +1,6 @@
 import React from 'react';
 import { GetStaticProps } from 'next';
-const contact = () => {
+const Contact = () => {
     return (
         <div>
             contact
@@ -16,4 +16,4 @@ export const getStaticProps: GetStaticProps = async () => {
         props: { metaTags }
     }
 }
-export default contact;
+export default Contact;

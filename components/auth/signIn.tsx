@@ -88,6 +88,7 @@ const SignIn = (props: Props) => {
                 token: data.token,
                 expire: expire
             };
+            // document.cookie = `BOOKING_ACCESS_TOKEN=${data.token};max-age=${24 * 60 * 60}`;
             localStorage.setItem("TOKEN", JSON.stringify(Config.token));
             onClose(true);
         }))
