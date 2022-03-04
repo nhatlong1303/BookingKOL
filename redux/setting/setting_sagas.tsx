@@ -30,7 +30,7 @@ export function* getSetting(data: any) {
         const timer = new Date().getTime();
         const newDate = new Date().getTime() + 30 * 24 * 60 * 60 * 1000; // 1days
         if (getToken && expire > timer) {
-            const _expireCal = Math.round((expire - timer) / (1000 * 60 * 60 * 24));
+            const _expireCal = Number(((expire - timer) / (1000 * 60 * 60 * 24)).toFixed(2));
             console.log('còn ' + _expireCal + ' ngày')
             Config.token = _token;
             if (_expireCal > 0.2) {

@@ -35,6 +35,14 @@ const useStyle = makeStyles((theme: any) => ({
             [theme.breakpoints.down("md")]: {
                 marginTop: '50px !important',
             },
+            [theme.breakpoints.down("sm")]: {
+                '& .main-page': {
+                    marginRight: 24,
+                },
+                '& .main-right': {
+                    width: 66
+                },
+            },
             '& .main-right': {
                 position: 'relative',
             },

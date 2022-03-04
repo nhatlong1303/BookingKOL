@@ -14,7 +14,10 @@ const useStyle = makeStyles((theme: any) => ({
         fontSize: 20,
         fontWeight: 500,
         paddingTop: 20,
-        paddingBottom: 10
+        paddingBottom: 10,
+        [theme.breakpoints.down("sm")]: {
+            display: 'none'
+        },
     },
     kols: {
         '& .info': {
@@ -24,12 +27,16 @@ const useStyle = makeStyles((theme: any) => ({
             color: theme.palette.common.Ink.Gray,
         },
         [theme.breakpoints.down("sm")]: {
-            '& .info': {
-                display: 'none !important'
-            },
-            '& .avatar': {
-                margin: '0 !important'
-            },
+            '& .item-kol': {
+                padding: '0 5px !important',
+                '& .info': {
+                    display: 'none !important'
+                },
+                '& .avatar': {
+                    margin: '0 !important',
+                },
+            }
+
         },
     },
     copyRight: {
@@ -128,8 +135,7 @@ const MainRight = () => {
                 {users.map((user: any, i: number) => (
                     <div className='item-kol' key={i} onClick={() => onReading(user?._id)}>
                         <div className='avatar'>
-                            <Image src={Config.getImage(user?.profile?.imgPortrait) ?? '/images/avatar.png'} priority alt='' width={49} height={49}
-                                blurDataURL={'/images/blur.png'} placeholder="blur" />
+                            <Image src={Config.getImage(user?.profile?.imgPortrait) ?? '/images/no_image.png'} priority alt='' width={49} height={49} />
                         </div>
                         <div className='info'>
                             <span className='username'>{user?.profile?.fullName}</span>

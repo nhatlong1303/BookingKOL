@@ -146,7 +146,7 @@ const Home: NextPage = (props: any) => {
       hasNextPage.current = data.hasNextPage;
       loadMore.current = false;
       setLoading(false);
-      const rand = Config.getRandomNumber(0, 10);
+      const rand = Config.getRandomNumber(4, 10);
       data.docs.splice(rand, 0, { ads: true, index: rand });
       const _users = isReset ? data.docs : users.concat(data.docs);
       setUsers(_users);
@@ -240,7 +240,7 @@ const getUsers = async () => {
 
 export const getStaticProps: GetStaticProps = async () => {
   const kols = await getUsers();
-  const rand = Config.getRandomNumber(0, 10);
+  const rand = Config.getRandomNumber(4, 10);
   if (kols?.docs) {
     kols.docs.splice(rand, 0, { ads: true, index: rand });
   }

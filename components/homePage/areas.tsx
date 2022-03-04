@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState } from 'react';
-import Image from 'next/image';
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import { makeStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
@@ -9,9 +8,8 @@ import { useRef } from 'react';
 type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
 
 const useStyle = makeStyles((theme: any) => ({
-    category: {
+    areas: {
         marginBottom: 32,
-        display: 'flex',
         '& .react-horizontal-scrolling-menu--item': {
             '& .actived': {
                 backgroundColor: theme.palette.common.Brand.Orange,
@@ -71,7 +69,7 @@ const Areas = (props: Props) => {
         const widthRight = document.querySelector<HTMLElement>('.main-right')?.clientWidth;
         const widthMain = document.querySelector<HTMLElement>('.main')?.clientWidth;
         if (wraper && widthMain && widthRight) {
-            wraper.style.maxWidth = (widthMain - widthRight - 80) + 'px' ?? '100%';
+            wraper.style.width = (widthMain - (widthMain < 580 ? 66 : widthRight) - 80) + 'px' ?? '100%';
         }
         if (slide && widthMain && widthRight) {
             slide.style.width = (widthMain - widthRight - 80) + 'px' ?? '100%';
@@ -90,7 +88,7 @@ const Areas = (props: Props) => {
             <ScrollMenu
                 LeftArrow={() => LeftArrow(itemId.current)}
                 RightArrow={() => RightArrow(itemId.current)}
-                wrapperClassName={classes.category}
+                wrapperClassName={classes.areas}
                 onWheel={onWheel}
             >
                 <Card title='Tất cả' actived={actived === ''} itemId='all' id="" onClick={onSelected} />
@@ -111,7 +109,7 @@ const Card = ({ title, itemId, onClick, actived, id }: { title: string; itemId: 
 }
 
 const LeftArrow = (itemId: string) => {
-    const { isFirstItemVisible, scrollPrev, visibleItemsWithoutSeparators, initComplete,getItemById } = useContext(VisibilityContext);
+    const { isFirstItemVisible, scrollPrev, visibleItemsWithoutSeparators, initComplete, getItemById } = useContext(VisibilityContext);
     const [disabled, setDisabled] = useState(!initComplete || (initComplete && isFirstItemVisible));
     useEffect(() => {
         if (visibleItemsWithoutSeparators.length) {
