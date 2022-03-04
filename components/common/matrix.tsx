@@ -117,6 +117,7 @@ const Matrix = () => {
         return () => {
             window.removeEventListener('resize', resize, true);
         }
+        /* eslint-disable */
     }, [])
 
 

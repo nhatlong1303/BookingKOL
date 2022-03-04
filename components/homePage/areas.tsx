@@ -90,9 +90,9 @@ const Areas = (props: Props) => {
                 wrapperClassName={classes.areas}
             >
                 <Card title='Tất cả' actived={actived === ''} itemId='all' id="" onClick={onSelected} />
-                {/* {areasOfConcern.map((rs: any, i: number) => (
+                {areasOfConcern.map((rs: any, i: number) => (
                     <Card key={i} title={rs.name} id={rs._id} itemId={String(i)} actived={actived === rs._id} onClick={onSelected} />
-                ))} */}
+                ))}
             </ScrollMenu>
         </div>
     );
