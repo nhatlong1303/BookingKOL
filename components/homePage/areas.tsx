@@ -5,8 +5,6 @@ import { useSelector } from 'react-redux';
 import InlineSVG from "react-inlinesvg";
 import { useRef } from 'react';
 
-type scrollVisibilityApiType = React.ContextType<typeof VisibilityContext>;
-
 const useStyle = makeStyles((theme: any) => ({
     areas: {
         marginBottom: 32,
@@ -90,7 +88,6 @@ const Areas = (props: Props) => {
                 LeftArrow={() => LeftArrow(itemId.current)}
                 RightArrow={() => RightArrow(itemId.current)}
                 wrapperClassName={classes.areas}
-                onWheel={onWheel}
             >
                 <Card title='Tất cả' actived={actived === ''} itemId='all' id="" onClick={onSelected} />
                 {areasOfConcern.map((rs: any, i: number) => (
@@ -102,8 +99,8 @@ const Areas = (props: Props) => {
 };
 
 const Card = ({ title, itemId, onClick, actived, id }: { title: string; itemId: string, onClick: (id: string, itemId: string) => void, actived: boolean, id: any }) => {
-    const visibility = useContext(VisibilityContext);
-    const visible = visibility.isItemVisible(itemId);
+    // const visibility = useContext(VisibilityContext);
+    // const visible = visibility.isItemVisible(itemId);
     return (
         <div className={`cate ${actived ? 'actived' : ''}`} onClick={() => onClick(id, itemId)}>{title}</div>
     )
@@ -136,22 +133,6 @@ const RightArrow = (itemId: string) => {
     return (
         !disabled && <div onClick={() => scrollNext()} className={`nav-next ${!_visible ? 'unvisible' : ''}`}><InlineSVG src={'/icons/ArrowRight.svg'} /></div>
     )
-}
-
-
-function onWheel(apiObj: scrollVisibilityApiType, ev: React.WheelEvent): void {
-    const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
-
-    if (isThouchpad) {
-        ev.stopPropagation();
-        return;
-    }
-
-    if (ev.deltaY < 0) {
-        apiObj.scrollNext();
-    } else if (ev.deltaY > 0) {
-        apiObj.scrollPrev();
-    }
 }
 
 export default Areas;
