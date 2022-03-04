@@ -35,6 +35,11 @@ const useStyle = makeStyles((theme: any) => ({
             [theme.breakpoints.down("md")]: {
                 marginTop: '50px !important',
             },
+            [theme.breakpoints.up("sm")]: {
+                '& .loading-more': {
+                    fontSize: 5
+                }
+            },
             [theme.breakpoints.down("sm")]: {
                 '& .main-page': {
                     marginRight: 24,
@@ -42,16 +47,17 @@ const useStyle = makeStyles((theme: any) => ({
                 '& .main-right': {
                     width: 66
                 },
+                '& .slider': {
+                    display: 'none'
+                },
+                '& .loading-more': {
+                    fontSize: 4
+                }
             },
             '& .main-right': {
                 position: 'relative',
             },
-            '& .slider': {
-                maxWidth: 896,
-                height: 239,
-                maxHeight: 239,
-                border: '1px solid #cfcfcf'
-            }
+
         },
         '& .form-hook': {
             margin: 'auto',

@@ -8,7 +8,9 @@ import Image from 'next/image';
 const AdSlide = () => {
     return (
         // <GoogleAd className="slider" slot='2' format='fluid' layout='in-article' />
-        <Image src={'/images/sliderads.png'} priority alt='' width={896} height={230} />
+        <div className="slider" >
+            <Image src={'/images/sliderads.png'} priority alt='' width={896} height={230} />
+        </div>
     );
 };
 

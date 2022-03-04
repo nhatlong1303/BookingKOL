@@ -18,12 +18,18 @@ import Api from '../services/api';
 const useStyle = makeStyles((theme: any) => ({
   HomePage: {
     position: 'relative',
-    marginTop: 10
+    marginTop: 10,
   },
   title: {
     color: theme.palette.common.Ink.Dark,
-    fontSize: 32,
-    fontWeight: 500
+    fontWeight: 500,
+    [theme.breakpoints.up("md")]: {
+      fontSize: 32,
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: 24,
+
+    },
   },
   nav: {
     display: 'flex',
@@ -137,6 +143,7 @@ const Home: NextPage = (props: any) => {
   }, [users])
 
   const getUsers = (isReset: boolean) => {
+    setLoading(true);
     dispatch(UsersActions.onFindUsers(filter.current, (error: any, data: any) => {
       if (error) {
         setLoading(false);
@@ -158,7 +165,6 @@ const Home: NextPage = (props: any) => {
   }
 
   const onFilterAreasOfConcern = (id: any) => {
-    setLoading(true);
     filter.current.areasOfConcern = id;
     filter.current.page = 1;
     getUsers(true);
@@ -179,7 +185,7 @@ const Home: NextPage = (props: any) => {
   return (
     <div className={classes.HomePage} >
       <div className={classes.title}>Lĩnh vực</div>
-      {/* <Areas onFilterAreasOfConcern={onFilterAreasOfConcern} /> */}
+      <Areas onFilterAreasOfConcern={onFilterAreasOfConcern} />
       {loading &&
         <div className="loader-container">
           <div className="loader"></div>
@@ -229,6 +235,7 @@ const Home: NextPage = (props: any) => {
             </div>
         ))}
       </div>
+      {loading && <div className="loader loading-more"></div>}
     </div>
   );
 };
