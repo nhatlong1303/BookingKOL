@@ -60,6 +60,7 @@ const Areas = (props: Props) => {
         return () => {
             window.removeEventListener('resize', onRisze);
         }
+        /* eslint-disable */
     }, [])
 
 
