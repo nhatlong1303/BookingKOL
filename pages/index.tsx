@@ -179,7 +179,7 @@ const Home: NextPage = (props: any) => {
   return (
     <div className={classes.HomePage} >
       <div className={classes.title}>Lĩnh vực</div>
-      <Areas onFilterAreasOfConcern={onFilterAreasOfConcern} />
+      {/* <Areas onFilterAreasOfConcern={onFilterAreasOfConcern} /> */}
       {loading &&
         <div className="loader-container">
           <div className="loader"></div>
