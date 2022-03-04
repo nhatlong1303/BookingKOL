@@ -14,7 +14,7 @@ import { createSelector } from 'reselect';
 const useStyle = makeStyles((theme: any) => ({
     root: {
         '& .main': {
-            marginTop: '80px !important',
+            marginTop: 80,
             paddingTop: 32,
             display: 'flex',
             justifyContent: 'space-between',
@@ -30,10 +30,11 @@ const useStyle = makeStyles((theme: any) => ({
             },
             [theme.breakpoints.down("lg")]: {
                 paddingLeft: 24,
-                paddingRight: 24
+                paddingRight: 24,
+                paddingTop: 24,
             },
             [theme.breakpoints.down("md")]: {
-                marginTop: '50px !important',
+                marginTop: 60,
             },
             [theme.breakpoints.up("sm")]: {
                 '& .loading-more': {
@@ -41,8 +42,11 @@ const useStyle = makeStyles((theme: any) => ({
                 }
             },
             [theme.breakpoints.down("sm")]: {
+                paddingTop: 12,
+                paddingLeft: 12,
+                paddingRight: 12,
                 '& .main-page': {
-                    marginRight: 24,
+                    marginRight: 12,
                 },
                 '& .main-right': {
                     width: 66

@@ -68,7 +68,7 @@ const Areas = (props: Props) => {
         const widthRight = document.querySelector<HTMLElement>('.main-right')?.clientWidth;
         const widthMain = document.querySelector<HTMLElement>('.main')?.clientWidth;
         if (wraper && widthMain && widthRight) {
-            wraper.style.width = (widthMain - (widthMain < 580 ? 66 : widthRight) - 80) + 'px' ?? '100%';
+            wraper.style.width = (widthMain - (widthMain < 580 ? 22 : widthRight) - 80) + 'px' ?? '100%';
         }
         if (slide && widthMain && widthRight) {
             slide.style.width = (widthMain - widthRight - 80) + 'px' ?? '100%';
@@ -90,9 +90,9 @@ const Areas = (props: Props) => {
                 wrapperClassName={classes.areas}
             >
                 <Card title='Tất cả' actived={actived === ''} itemId='all' id="" onClick={onSelected} />
-                {areasOfConcern.map((rs: any, i: number) => (
+                {/* {areasOfConcern.map((rs: any, i: number) => (
                     <Card key={i} title={rs.name} id={rs._id} itemId={String(i)} actived={actived === rs._id} onClick={onSelected} />
-                ))}
+                ))} */}
             </ScrollMenu>
         </div>
     );
