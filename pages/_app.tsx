@@ -13,6 +13,7 @@ import '../styles/index.scss';
 import "swiper/css/bundle";
 import { useRouter } from 'next/router';
 import * as gtag from '../components/common/googleAd/gtag';
+import 'intersection-observer';
 // import Script from 'next/script';
 // import Config from '../config/index';
 
