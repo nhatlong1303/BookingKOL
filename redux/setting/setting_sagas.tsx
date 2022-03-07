@@ -11,7 +11,8 @@ export default function SettingSagas() {
         watchOnLogin(),
         watchOnLogout(),
         watchOnUpload(),
-        watchOnUpdateProfile()
+        watchOnUpdateProfile(),
+        watchOnUpdateNetWork()
     ];
 }
 
@@ -237,5 +238,27 @@ export function* watchOnUpdateProfile() {
         yield cancel(watcher);
     }
 }
+
+export function* onUpdateNetWork(data: any) {
+    try {
+        yield put({
+            type: types.NETWORK_SUCCESS,
+            data: data.params
+        });
+    }
+    catch (e) {
+        console.log('onUpdateNetWork is error');
+    }
+
+}
+export function* watchOnUpdateNetWork() {
+    while (true) {
+        // @ts-ignore
+        const watcher = yield takeLatest(types.NETWORK, onUpdateNetWork);
+        yield take(['NETWORK']);
+        yield cancel(watcher);
+    }
+}
+
 
 

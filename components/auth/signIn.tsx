@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { makeStyles } from '@mui/styles';
-import { TextField, Button, InputAdornment, IconButton } from '@mui/material';
+import { TextField, Button, InputAdornment, IconButton, CircularProgress } from '@mui/material';
 import { useForm } from "react-hook-form";
 import Image from 'next/image';
 import Visibility from '@mui/icons-material/Visibility';
@@ -141,7 +141,7 @@ const SignIn = (props: Props) => {
                             }}
                         />
                         <Button variant="outlined" className='btn-custom-kol btn-login' type='submit' onClick={handleSubmit(onLogin)}>
-                            {loading ? <><div className="loader" style={{ fontSize: 2, marginRight: 10 }}></div> Đang đăng nhập </> : 'Đăng nhập'}
+                            {loading ? <div className="center-row"><CircularProgress size={20} className="mgr10" color="inherit" /> Đang đăng nhập </div> : 'Đăng nhập'}
                         </Button>
                     </form>
                 </div>

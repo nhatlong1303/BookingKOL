@@ -10,11 +10,12 @@ import Config from '../../config/index';
 import { useRouter } from 'next/router';
 import AdSlide from './adSlide';
 import { createSelector } from 'reselect';
+import Notify from '../common/notification/notification';
 
 const useStyle = makeStyles((theme: any) => ({
     root: {
         '& .main': {
-            marginTop: 80,
+            marginTop: '80px !important',
             paddingTop: 32,
             display: 'flex',
             justifyContent: 'space-between',
@@ -144,8 +145,23 @@ const Layout = (props: Props) => {
             const route = routes.find(rs => (url.substring(1) === '' ? '/' : url.substring(1)).indexOf(rs) !== -1);
             setTab(route ?? 'null');
         });
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        return () => {
+            window.removeEventListener('online', updateOnlineStatus);
+            window.removeEventListener('offline', updateOnlineStatus);
+        }
         /* eslint-disable */
     }, [])
+
+    const updateOnlineStatus = (e: any) => {
+        if (navigator.onLine) {
+            Config.notify.show('success', 'Đã khôi phục kết nối Internet.')
+        } else {
+            Config.notify.show('default', 'Bạn đang offline.', { time: -1 })
+        }
+        dispatch(SettingActions.onUpdateNetWork(navigator.onLine));
+    }
 
     const onLogout = () => {
         dispatch(SettingActions.onLogout());
@@ -174,6 +190,7 @@ const Layout = (props: Props) => {
                         <MainRight />
                     </>
                 }
+                <Notify ref={ref => Config.notify = ref} />
             </div>
             <ButtonToTop />
         </div>

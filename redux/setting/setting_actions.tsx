@@ -12,6 +12,8 @@ export const types = {
     UPLOAD_IMAGE: 'UPLOAD_IMAGE',
     UPDATE_PROFILE: 'UPDATE_PROFILE',
     UPDATE_PROFILE_SUCCESS: 'UPDATE_PROFILE_SUCCESS',
+    NETWORK: 'NETWORK',
+    NETWORK_SUCCESS: 'NETWORK_SUCCESS'
 };
 
 export function getSetting(params?: any, cb?: any) {
@@ -71,6 +73,13 @@ export function onUpdateProfile(params?: any, cb?: any) {
 }
 
 
+export function onUpdateNetWork(params?: any, cb?: any) {
+    return {
+        type: types.NETWORK,
+        params,
+        cb
+    }
+}
 
 
 

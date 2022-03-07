@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { TextField, Button, InputAdornment, IconButton } from '@mui/material';
+import { TextField, Button, InputAdornment, IconButton, CircularProgress } from '@mui/material';
 import { useForm } from "react-hook-form";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -216,7 +216,7 @@ const SignUp = (props: Props) => {
                                     />
                                 </div>
                                 <Button disabled={loading} variant="outlined" className='btn-custom-kol btn-login' type='submit' onClick={handleSubmit(onVerify)}>
-                                    {loading ? <><div className="loader" style={{ fontSize: 2, marginRight: 10 }}></div> Đang xác thực </> : 'Xác thực'}
+                                    {loading ? <div className="center-row"><CircularProgress size={20} className="mgr10" color="inherit" /> Đang xác thực </div> : 'Xác thực'}
                                 </Button>
                             </div>
                             :
@@ -256,7 +256,7 @@ const SignUp = (props: Props) => {
                                     {...register("ref")}
                                 />
                                 <Button disabled={loading} variant="outlined" className='btn-custom-kol btn-login' type='submit' onClick={handleSubmit(onRegister)}>
-                                    {loading ? <><div className="loader" style={{ fontSize: 2, marginRight: 10 }}></div> Đang tạo</> : 'Tạo tài khoản'}
+                                    {loading ? <div className="center-row"><CircularProgress size={20} className="mgr10" color="inherit" /> Đang tạo </div> : 'Tạo tài khoản'}
                                 </Button>
                             </>
                         }

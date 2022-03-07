@@ -1,11 +1,10 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import type { NextPage, GetStaticProps } from 'next'
 import { makeStyles } from '@mui/styles';
-import { useTheme } from '@emotion/react';
 import { useThemeContext } from '../components/theme/ThemeContext';
 import Image from 'next/image';
 import Areas from '../components/homePage/areas';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import * as UsersActions from '../redux/user/user_actions';
 import Config from '../config/index';
@@ -119,7 +118,6 @@ const useStyle = makeStyles((theme: any) => ({
 }))
 const Home: NextPage = (props: any) => {
   // const { themeMode, toggleTheme } = useThemeContext();
-  // const theme = useTheme();
   const { kols } = props;
   const classes = useStyle();
   const router = useRouter();
@@ -171,7 +169,7 @@ const Home: NextPage = (props: any) => {
   }
 
   const onScroll = (e: any) => {
-    if (document.scrollingElement?.scrollHeight !== undefined) {
+    if (document.scrollingElement?.scrollHeight !== undefined && navigator.onLine) {
       const loadmore = window.innerHeight + document.documentElement.scrollTop >= (document.scrollingElement?.scrollHeight - (document.scrollingElement?.scrollHeight / 4));
       if (loadmore && !loadMore.current && hasNextPage.current) {
         loadMore.current = true;
@@ -188,7 +186,7 @@ const Home: NextPage = (props: any) => {
       <Areas onFilterAreasOfConcern={onFilterAreasOfConcern} />
       {loading &&
         <div className="loader-container">
-          <div className="loader"></div>
+          <div className="text-center"><CircularProgress size={50} /></div>
         </div>
       }
       <div className={`${classes.cardKols} cardKols`} >
@@ -235,7 +233,7 @@ const Home: NextPage = (props: any) => {
             </div>
         ))}
       </div>
-      {loading && <div className="loader loading-more"></div>}
+      {loading && <div className="text-center"><CircularProgress /></div>}
     </div>
   );
 };

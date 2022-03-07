@@ -25,9 +25,11 @@ const ThemeProvider = ({ children }: Props) => {
     const themeMui = createTheme({
         palette: {
             mode: themeMode,
-            primary: {
-                main: '#FF9767'
-            },
+            primary: { main: '#FF9767' },
+            info: { main: '#4067E5' },
+            success: { main: '#5FD993' },
+            warning: { main: '#FFD85C' },
+            error: { main: '#F56C6C' },
             common: {
                 Brand: {
                     Orange: '#FF9767',

@@ -5,6 +5,7 @@ const initialState = {
     areasOfConcern: [],
     profile: null,
     loading: true,
+    isOnline: true
 };
 
 interface Action {
@@ -36,6 +37,11 @@ export const setting = (state = initialState, action: Action) => {
             return {
                 ...state,
                 loading: action.data
+            }
+        case types.NETWORK_SUCCESS:
+            return {
+                ...state,
+                isOnline: action.data
             }
         default:
             return state;
