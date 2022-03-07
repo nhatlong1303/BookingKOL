@@ -12,6 +12,8 @@ import { useRouter } from 'next/router';
 import InlineSVG from "react-inlinesvg";
 import ImageWithFallBack from '../components/common/imageWithFallBack/imageWithFallBack';
 import Api from '../services/api';
+import InfiniteScroll from "react-infinite-scroll-component";
+
 // import GoogleAd from '../components/common/googleAd/googleAd';
 
 const useStyle = makeStyles((theme: any) => ({
@@ -132,14 +134,6 @@ const Home: NextPage = (props: any) => {
   //   toggleTheme()
   // }
 
-  useEffect(() => {
-    document.addEventListener('scroll', onScroll);
-    return () => {
-      document.removeEventListener('scroll', onScroll);
-    }
-    /* eslint-disable */
-  }, [users])
-
   const getUsers = (isReset: boolean) => {
     setLoading(true);
     dispatch(UsersActions.onFindUsers(filter.current, (error: any, data: any) => {
@@ -168,18 +162,6 @@ const Home: NextPage = (props: any) => {
     getUsers(true);
   }
 
-  const onScroll = (e: any) => {
-    if (document.scrollingElement?.scrollHeight !== undefined && navigator.onLine) {
-      const loadmore = window.innerHeight + document.documentElement.scrollTop >= (document.scrollingElement?.scrollHeight - (document.scrollingElement?.scrollHeight / 4));
-      if (loadmore && !loadMore.current && hasNextPage.current) {
-        loadMore.current = true;
-        filter.current.page = filter.current.page + 1;
-        getUsers(false);
-      }
-    }
-  }
-
-
   return (
     <div className={classes.HomePage} >
       <div className={classes.title}>Lĩnh vực</div>
@@ -189,7 +171,22 @@ const Home: NextPage = (props: any) => {
           <div className="text-center"><CircularProgress size={50} /></div>
         </div>
       }
-      <div className={`${classes.cardKols} cardKols`} >
+      <InfiniteScroll
+        className={`${classes.cardKols} cardKols`}
+        dataLength={users.length}
+        next={() => {
+          if (!navigator.onLine) return;
+          filter.current.page = filter.current.page + 1;
+          getUsers(false)
+        }}
+        hasMore={hasNextPage.current}
+        loader={<div className="text-center full-w"><CircularProgress /></div>}
+      // endMessage={
+      //   <div style={{ textAlign: "center" }}>
+      //     <b>Yay! You have seen it all</b>
+      //   </div>
+      // }
+      >
         {users.map((user: any, i: number) => (
           user?.ads ?
             <div className='card' key={i} >
@@ -232,8 +229,7 @@ const Home: NextPage = (props: any) => {
               </div>
             </div>
         ))}
-      </div>
-      {loading && <div className="text-center"><CircularProgress /></div>}
+      </InfiniteScroll>
     </div>
   );
 };
