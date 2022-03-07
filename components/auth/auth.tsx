@@ -1,12 +1,13 @@
 import React, { useState, useContext, useMemo, useEffect } from 'react';
 import Modal from '../common/modal/modal';
 import TabContent, { TabPanel } from '../common/tabs/tabContent';
-import { Tabs, Tab } from '@mui/material';
+import { Tabs, Tab, IconButton } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import SignUp from './signUp';
 import SignIn from './signIn';
 import ResizePageContainer from '../common/resizePageContainer';
 import { ResizeContext } from '../common/context/context';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const useStyle = makeStyles((theme: any) => ({
@@ -15,6 +16,12 @@ const useStyle = makeStyles((theme: any) => ({
             '& .MuiTabs-flexContainer button': {
                 margin: '5px 0 !important',
             }
+        },
+        '& .button-x': {
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: '5px 5px 0 0'
+
         },
         '& .MuiPaper-root': {
             borderRadius: 16,
@@ -166,6 +173,11 @@ const Component = (props: Props) => {
             open={true}
             className={classes.auth}
         >
+            <div className='button-x'>
+                <IconButton size='small' onClick={() => onClose(false)}>
+                    <CloseIcon />
+                </IconButton>
+            </div>
             <Tabs
                 value={tab}
                 onChange={(e, value) => setTab(value)}

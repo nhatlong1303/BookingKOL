@@ -144,7 +144,7 @@ const MainRight = () => {
                     </div>
                 ))}
             </div>
-            <div style={{ marginBottom: 32, border: '1px solid #cfcfcf', }}>
+            <div style={{ marginBottom: 32 }}>
                 {/* <GoogleAd slot='2' /> */}
                 <Image src={'/images/bannerads.png'} priority alt='' width={272} height={281} />
             </div>

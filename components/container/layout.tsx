@@ -35,7 +35,7 @@ const useStyle = makeStyles((theme: any) => ({
                 paddingTop: 24,
             },
             [theme.breakpoints.down("md")]: {
-                marginTop: 60,
+                marginTop: '60px !important',
             },
             [theme.breakpoints.up("sm")]: {
                 '& .loading-more': {
